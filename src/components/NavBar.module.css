@@ -1,0 +1,18 @@
+.header_statistic {
+    /*pointer-events: none;*/
+    /*opacity: 0;*/
+}
+
+.btn_avt {
+    opacity: 0;
+    pointer-events: none;
+}
+
+@media (max-width: 991px){
+
+
+    .btn_avt {
+        opacity: 1;
+        pointer-events: unset;
+    }
+}

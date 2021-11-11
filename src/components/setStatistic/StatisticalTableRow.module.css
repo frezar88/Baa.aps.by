@@ -1,0 +1,9 @@
+.active{
+    border: none !important;
+    border-left: solid 3px red !important;
+    border-right: solid 3px red !important;
+    border-top: solid 1px #000 !important;
+    border-bottom: solid 1px #000 !important;
+
+
+}

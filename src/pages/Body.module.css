@@ -1,0 +1,14 @@
+.block{
+    transition: .3s;
+    cursor: pointer;
+}
+.block:hover{
+    background: black !important;
+    color: #fff;
+}
+
+@media (max-width: 590px){
+    .buttons{
+        display: none;
+    }
+}

@@ -1,0 +1,10 @@
+.body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    border: solid 1px gray;
+}
+
+.body > div:first-child {
+    border-right: solid 1px grey;
+}

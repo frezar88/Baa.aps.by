@@ -1,0 +1,9 @@
+.textArea{
+    resize: none;
+    border: solid 1px gray !important;
+    min-height: 200px !important;
+}
+.textArea:focus{
+    outline: none !important;
+    box-shadow: none;
+}

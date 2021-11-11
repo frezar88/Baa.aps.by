@@ -1,0 +1,45 @@
+.activeTd{
+    border: none !important;
+    border-left: solid 3px red !important;
+    border-right: solid 3px red !important;
+    border-top: solid 1px #000 !important;
+    border-bottom: solid 1px #000 !important;
+
+}
+
+#editStatistic a.active{
+    background: #000;
+    color: #fff;
+}
+#editStatistic a{
+    color: #000;
+    border: solid 1px #000;
+    margin: 3px 0;
+}
+.tab-pane,.tab-pane.active{
+    display: grid;
+}
+
+.form-check-input[type="checkbox"]{
+    width: 25px;
+    height: 25px;
+}
+.form-check-input[type="checkbox"]:focus{
+  outline: none !important;
+}
+
+.form-check-input:checked{
+    background-color: #000 !important;
+    border-color: #000 !important;
+    width: 25px;
+    height: 25px;
+}
+.nav-tabs button.nav-link{
+    color: #fff !important;
+}
+.nav-tabs button.nav-link.active{
+    color: #000 !important;
+}
+.nav-tabs{
+    border-bottom: solid 1px grey;
+}

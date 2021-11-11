@@ -1,0 +1,41 @@
+.grid_menu{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 20px;
+    justify-content: center;
+    align-items: center;
+    max-width: 1000px;
+
+}
+.grid_menu div{
+   max-width: 300px;
+    width: 100%;
+    align-self: end;
+}
+
+.block{
+    transition: .3s;
+    cursor: pointer;
+    max-height: 150px;
+    overflow: hidden;
+}
+.block:hover{
+    background: black !important;
+    color: #fff;
+}
+
+@media (max-width: 590px){
+    .buttons> div{
+        left: calc(50% - 160px)  !important;
+        top: 10px !important;
+    }
+    .grid_menu{
+        display: grid;
+        grid-template-columns: 1fr ;
+        grid-gap: 20px;
+        justify-content: center;
+        align-items: center;
+        max-width: 325px;
+
+    }
+}
