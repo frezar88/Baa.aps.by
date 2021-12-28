@@ -14,6 +14,7 @@ const CompareTopBlockTypeBlock = (props) => {
                             <form>
                                 <ul className='mt-3 p-0' style={{listStyle: 'none'}}>
                                     <ListItemCarType
+                                        setCurrentYear={props.setCurrentYear}
                                         stateInputOldYear={props.stateInputOldYear}
                                         setStateInputOldYear={props.setStateInputOldYear}
                                         value={props.valueType}
@@ -23,11 +24,16 @@ const CompareTopBlockTypeBlock = (props) => {
                             </form>
                         </Form.Label>
                         <Button
+                            disabled={props.blockedButton}
                             onClick={props.eventBtn}
                             className={'mt-4'}
-                            variant={"secondary"}
+                            variant={"primary"}
                             style={{display: 'block', width: '100%', height: '46px',}}>
-                            {/*<Spinner animation={"grow"}/>*/} Сравнить
+                            {
+                                props.blockedButton ? <Spinner animation={"grow"}/> : 'Сравнить'
+                            }
+
+
                         </Button>
                     </div>
 

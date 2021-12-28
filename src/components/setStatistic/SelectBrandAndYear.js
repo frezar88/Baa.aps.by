@@ -12,7 +12,9 @@ const SelectBrandAndYear = (props) => {
             let checkArray = []
             let userBrand = []
             getCars().then(data => {
-                    data.data.forEach(el => {
+                let models = data.data.included.models.map((m) => ({...m, brand: data.data.included.brands.find((b) => b.id === m.brand_id)}));
+                let result = data.data.data.map((el) => ({...el, model: models.find((m) => el.model_id === m.id)}));
+                result.forEach(el => {
                         if (checkArray.indexOf(el.model.brand.name) === -1) {
                             checkArray.push(el.model.brand.name)
                             userBrand.push(el.model.brand)
@@ -64,32 +66,32 @@ const SelectBrandAndYear = (props) => {
                 </Form.Label>
             </div>
             <div>
-                <Form.Label style={{
-                    fontWeight: 600,
-                    fontSize: 16,
-                    display: "flex",
-                    alignItems: 'center',
-                    color:'#fff'
+                {/*<Form.Label style={{*/}
+                {/*    fontWeight: 600,*/}
+                {/*    fontSize: 16,*/}
+                {/*    display: "flex",*/}
+                {/*    alignItems: 'center',*/}
+                {/*    color:'#fff'*/}
 
-                }}>
-                    год
-                    <Form.Select
-                        style={{
-                            boxSizing: "border-box",
-                            maxWidth: 200,
-                            padding: '.05rem .25rem .10rem .75rem',
-                            marginLeft: '12px'
-                        }}
-                        className={'select_mouth'}
-                        defaultValue={'1609448400'}
-                        onChange={(e) => props.stateYear(e.target['value'])}
+                {/*}}>*/}
+                {/*    год*/}
+                {/*    <Form.Select*/}
+                {/*        style={{*/}
+                {/*            boxSizing: "border-box",*/}
+                {/*            maxWidth: 200,*/}
+                {/*            padding: '.05rem .25rem .10rem .75rem',*/}
+                {/*            marginLeft: '12px'*/}
+                {/*        }}*/}
+                {/*        className={'select_mouth'}*/}
+                {/*        defaultValue={'1609448400'}*/}
+                {/*        onChange={(e) => props.stateYear(e.target['value'])}*/}
 
-                    >
-                        <option value="1609448400">2021</option>
-                        <option value="1640984400">2020</option>
+                {/*    >*/}
+                {/*        <option value="1609448400">2021</option>*/}
+                {/*        <option value="1640984400">2020</option>*/}
 
-                    </Form.Select>
-                </Form.Label>
+                {/*    </Form.Select>*/}
+                {/*</Form.Label>*/}
             </div>
 
         </div>

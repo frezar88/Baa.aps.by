@@ -1,40 +1,31 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import {Form} from "react-bootstrap";
 import s from "../../pages/SetStatistic.module.css";
 import TableThead from "./TableThead";
 import TableTbody from "./TableTbody";
-import ErrorBlock from "./ErrorBlock";
 import BtnSaveStatistic from "./BtnSaveStatistic";
-import {getFillingStatistic, sendStatic} from "../../http/brandAPI";
+import { sendStatic} from "../../http/brandAPI";
 import {SUCCESS_SEND_STATISTIC} from "../../utils/consts";
 import {useHistory} from "react-router-dom";
-import {Context} from "../../index";
+import PopUpBadRequest from "./PopUpBadRequest";
+import PopUpSendStatistic from "./PopUpSendStatistic";
 
 
 const Table = (props) => {
-    const {user} = useContext(Context)
+
     const history = useHistory()
     const presentDate = new Date().toLocaleString('en', {year: "numeric"})
     let selectedYear = new Date(props.stateSelectYear * 1000).toLocaleString('en', {year: 'numeric'})
     const [filled, setFilled] = useState('')
-    const [loadFilled, setLoadFilled] = useState(false)
+    const [loadFilled, setLoadFilled] = useState(true)
+    const [modalShow, setModalShow] = useState(false);
+    const [modalShowSend, setModalShowSend] = useState(false);
+    const [countAutoAndData,setCountAutoAndData]=useState({countCars:0,data:''})
 
-    const [errorText, setErrorText] = useState('')
-
-    useEffect(()=>{
-        let dateNow = Math.round(new Date() / 1000)
-        getFillingStatistic(dateNow).then((data) => {
-            setFilled(data.data['filled'].filter(item => item.dealer.name === user.User.dealer && item.brand_id === props.brand_id))
-
-            setLoadFilled(true)
-
-        })
-    },[])
 
 
     function sendFormData(e) {
         let inputsActive = document.querySelectorAll('.active input')
-
         let counter = {
             "timestamp": '',
             "brand_id": '',
@@ -61,9 +52,17 @@ const Table = (props) => {
                     e.target.className = 'btn btn-success'
                 }, 1000);
             } else {
+                let count=0;
+                inputsActive.forEach(el=>{
+                    count+=+el.value
+
+                })
+                setCountAutoAndData({countCars:count,data:counter})
                 counter.timestamp = inputsActive[0].attributes['data-mouth'].value
                 counter.brand_id = inputsActive[0].attributes['data-brand-id-set'].value
-                sendData(counter).then()
+                // sendData(counter).then()
+
+                setModalShowSend(true)
             }
         }
 
@@ -74,47 +73,50 @@ const Table = (props) => {
             await sendStatic(data)
             history.push(SUCCESS_SEND_STATISTIC)
         } catch (e) {
-
-            setErrorText(e.response.data)
-            setTimeout(() => {
-                setErrorText('')
-            }, 2000);
+            setModalShow(true)
         }
-
     }
     return (
-        <Form.Label style={{width: '100%'}}>
-            <Form>
-                <div className={s.table + ' mt-4 pb-4'}>
-                    <div style={{overflow: 'auto'}}>
-                        <table className={s.table_block}>
-                            <TableThead/>
-                            <TableTbody
-                                filled={filled}
-                                loadFilled={loadFilled}
-                                allModel={props.allModel}
-                                brand_id={props.brand_id}
-                                allModelSalesValue={props.allModelSalesValue}
-                                stateSelectYear={props.stateSelectYear}
-                            />
-                        </table>
+        <>
+            <PopUpSendStatistic countAutoAndData={countAutoAndData} show={modalShowSend} sendData={sendData} onHide={() => setModalShowSend(false)}/>
+            <Form.Label style={{width: '100%'}}>
+                <Form>
+                    <div className={s.table + ' mt-4 pb-4'}>
+                        <div style={{overflow: 'auto'}}>
+                            <table className={s.table_block}>
+                                <TableThead/>
+                                <TableTbody
+                                    filled={filled}
+                                    loadFilled={loadFilled}
+                                    allModel={props.allModel}
+                                    brand_id={props.brand_id}
+                                    allModelSalesValue={props.allModelSalesValue}
+                                    stateSelectYear={props.stateSelectYear}
+                                />
+                            </table>
+                        </div>
                     </div>
-                </div>
-                {
-                    errorText ?
-                        <ErrorBlock errorText={errorText}/>
-                        :
-                        false
-                }
-                {
-                    presentDate === selectedYear && !filled[0] && loadFilled ?
-                        <BtnSaveStatistic callback={sendFormData}/>
-                        :
-                        false
-                }
+                    {
+                        modalShow ?
+                            <>
+                                <PopUpBadRequest show={modalShow} onHide={() => setModalShow(false)}/>
+                            </>
 
-            </Form>
-        </Form.Label>
+                            :
+                            false
+                    }
+                    {
+                        presentDate === selectedYear && !filled[0] && loadFilled ?
+                            <BtnSaveStatistic callback={sendFormData}/>
+                            :
+                            false
+                    }
+
+                </Form>
+            </Form.Label>
+
+        </>
+
     );
 };
 

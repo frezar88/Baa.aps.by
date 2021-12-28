@@ -29,7 +29,7 @@ const Body = () => {
             }}>
             </Container>
             <div className={s.buttons}>
-                <Container style={{position: "absolute", maxWidth:'500px', top: (window.innerHeight - 70) / 2, left: 'calc(50% - 303px)'}}
+                <Container style={{position: "absolute", maxWidth:'620px', top: (window.innerHeight - 170) / 2, left: 'calc(50% - 320px)'}}
                            className="d-flex"
                 >
                     <div onClick={()=>{history.push(LOGIN_ROUTE) }} className={s.block +" p-5 d-flex justify-content-center align-items-center"}

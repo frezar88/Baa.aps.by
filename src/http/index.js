@@ -3,11 +3,11 @@ import axios from "axios";
 
 
 const $host = axios.create({
-    baseURL:'https://baa.aps.by'
+    baseURL:'/'
 })
 
 const $authHost = axios.create({
-    baseURL:'https://baa.aps.by'
+    baseURL:'/'
 })
 
 const authInterceptor = config =>{

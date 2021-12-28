@@ -45,9 +45,9 @@ const MyVerticallyCenteredModal = (props) => {
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant={"dark"} onClick={
+                <Button variant={"primary"} onClick={
                     (e)=>send({text:value})}>Отправить</Button>
-                <Button className='close_modal' variant={"outline-dark"} onClick={props.onHide}>Закрыть</Button>
+                <Button className='close_modal' style={{background:'#f58403',color:'#fff',borderColor:'#f58403'}} onClick={props.onHide}>Закрыть</Button>
             </Modal.Footer>
         </Modal>
 

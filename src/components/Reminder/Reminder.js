@@ -44,13 +44,15 @@ const Reminder = observer( (props) => {
     useEffect(() => {
         if (user.IsAuth){
             getFillingStatistic(dateNow).then(data => {
-                let sortStatistic=data.data['not_filled'].filter(item=>item.dealer.name === user.User.dealer)
-
-                if (sortStatistic[0]){
-                    props.setReminderState(true)
-                }else{
-                    props.setReminderState(false)
-                }
+                // let models = data.data.included.models.map((m) => ({...m, brand: data.data.included.brands.find((b) => b.id === m.brand_id)}));
+                // let result = data.data.data.map((el) => ({...el, model: models.find((m) => el.model_id === m.id)}));
+                // let sortStatistic=data.data['not_filled'].filter(item=>item.dealer.name === user.User.dealer)
+                //
+                // if (sortStatistic[0]){
+                //     props.setReminderState(true)
+                // }else{
+                //     props.setReminderState(false)
+                // }
             })
         }
 

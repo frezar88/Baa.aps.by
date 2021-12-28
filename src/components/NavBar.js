@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../index";
 import {Button, Container, Nav, Navbar} from "react-bootstrap";
 import {NavLink, useHistory} from "react-router-dom";
-import {LOGIN_ROUTE, STATISTIC_MENU} from "../utils/consts";
+import {LOGIN_ROUTE, PROFILE, STATISTIC_MENU} from "../utils/consts";
 import {observer} from "mobx-react-lite";
 import s from "./NavBar.module.css"
 import Reminder from "./Reminder/Reminder";
@@ -23,7 +23,7 @@ const NavBar = observer(() => {
 
     useEffect(()=>{
         num_of_days_to_send_stat().then(data=>{
-            console.log(data.data)
+
             setDayToSend(data.data['num_of_days_to_send_stat'])
         })
     },[])
@@ -112,18 +112,22 @@ const NavBar = observer(() => {
                     <div className='d-flex align-items-center'>
 
                         <Nav
+
                             className=" my-2 my-lg-0" style={{maxHeight: '150px'}} navbarScroll>
                             {
                                 user._isAuth ?
                                     <Nav className="ml-auto" style={{color: '#fff'}}>
-                                        <Button className="m-2" variant={'secondary'}
+                                        <Button className="m-2" variant={'primary'}
+                                                style={{color:''}}
+                                                onClick={() => history.push(PROFILE)}>Профиль</Button>
+                                        <Button className="m-2" variant={'warning'}  style={{background:'#f58403',color:'#fff',borderColor:'#f58403'}}
                                                 onClick={() => logOut()}>Выйти</Button>
                                     </Nav>
                                     :
                                     <Nav className="ml-auto" style={{color: '#fff'}}>
 
                                         <Button className={s.btn_avt + " m-2"}
-                                                variant={'outline-light'}
+                                                variant={'success'}
                                                 onClick={() => history.push(LOGIN_ROUTE)}>Авторизация</Button>
                                     </Nav>
                             }

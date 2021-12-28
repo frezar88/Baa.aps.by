@@ -34,6 +34,10 @@ export const getStatic = async () => {
     const response = await $authHost(`/server/sales-stats`)
     return response
 }
+export const getStaticForYear = async () => {
+    const response = await $authHost(`/server/sales-stats?date_from=1577826000&date_to=1631048500`)
+    return response
+}
 
 export const sendActiveCar = async (data) => {
     const response = await $authHost.get(`/server/car/toggle-on-sale?car_id=${data}`)
@@ -109,6 +113,10 @@ export const getStatisticForCompare = async (from, to, brand_id) => {
 }
 export const getStatisticForCompareAndCarType = async (from, to, brand_id,car_type) => {
     const response = await $authHost.get(`/server/stat/common?by_month=1&from=${from}&to=${to}&type=brand&brand_id=${brand_id}&car_type_id=${car_type}`)
+    return response
+}
+export const getCarSubType = async () => {
+    const response = await $authHost.get(`/server/car-subtypes`)
     return response
 }
 

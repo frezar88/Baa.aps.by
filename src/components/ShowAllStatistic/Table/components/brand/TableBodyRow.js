@@ -26,7 +26,7 @@ const TableBodyRow = (props) => {
 
     }, [props.data])
     return (
-        <div className={s.table_body_wrapper + ' wrap'} style={{order: Sum ? '-' + Sum : false}}>
+        <div className={s.table_body_wrapper + ' wrap'} style={{order: Sum ? '-' + Sum : false,}}>
             <div data-brand-id={props.brand_id} className={s.body_item +' header-brand'}>{props.brand_name}</div>
             <div data-brand-id={props.brand_id} data-mount-id={'1609448400'} className={s.body_item}>0</div>
             <div data-brand-id={props.brand_id} data-mount-id={'1612126800'} className={s.body_item}>0</div>

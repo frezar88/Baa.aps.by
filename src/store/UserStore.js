@@ -7,12 +7,16 @@ export default class UserStore{
         this._userCars = {}
         this._userBrand = {}
         this._userModels = {}
+        this._userRole = {}
         this._loadDone = false
         makeAutoObservable(this)
     }
 
     setIsAuth(bool){
         this._isAuth = bool
+    }
+    setUserRole(role){
+        this._isAuth = role
     }
     setLoadDone(bool){
         this._loadDone = bool
@@ -47,6 +51,9 @@ export default class UserStore{
     }
     get UserLoadDone(){
         return this._loadDone
+    }
+    get UserRole(){
+        return this._userRole
     }
 
 

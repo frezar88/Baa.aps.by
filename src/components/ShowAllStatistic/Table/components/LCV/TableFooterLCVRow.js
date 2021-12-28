@@ -68,7 +68,10 @@ const TableFooterLCVRow = (props) => {
                     <div className={s.footer_item}>{stateOctober}</div>
                     <div className={s.footer_item}>{stateNovember}</div>
                     <div className={s.footer_item}>{stateDecember}</div>
-                    <div className={s.footer_item}>{stateTotal}</div>
+                    <div className={s.footer_item}>{stateTotal ? stateTotal :
+                        stateJanuary + stateFebruary + stateMarch + stateApril + stateMay + stateJune + stateJuly + stateAugust + stateSeptember + stateOctober + stateNovember + stateDecember
+
+                    }</div>
             </div>
         );
 };

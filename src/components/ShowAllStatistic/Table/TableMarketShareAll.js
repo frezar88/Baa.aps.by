@@ -5,10 +5,10 @@ import { Context } from "../../../index";
 import { getAllStatistic } from "../../../http/brandAPI";
 import TableBodyRowMarketAll from "./components/MarketShareAll/TableBodyRowMarketAll";
 import TableHeadRowMarketAll from "./components/MarketShareAll/TableHeadRowMarketAll";
-import {Button} from "react-bootstrap";
+import {Button, Spinner} from "react-bootstrap";
 
 
-const TableMarketShareAll = () => {
+const TableMarketShareAll = ({setLoadDataDone}) => {
     const { brandModel } = useContext(Context)
     const [load,setLoad]=useState(false)
     const [countMonth,setCountMonth]=useState()
@@ -16,15 +16,16 @@ const TableMarketShareAll = () => {
     const [data, setData] = useState()
     useEffect(() => {
         getAllStatistic().then((data1) => {
-
+            console.log(data1.data)
             let arr = []
-            for (let dataKey in data1.data) {
-                data1.data[dataKey].forEach(el => {
+            for (let dataKey in data1.data.data) {
+                data1.data.data[dataKey].forEach(el => {
+
                     arr.push({
                         'date': dataKey,
                         'value': el.value,
-                        'brand_id': el.brand.id,
-                        'brand_name': el.brand.name,
+                        'brand_id': el.brand_id,
+                        'brand_name': data1.data.included.brands.find((b)=>b.id === el.brand_id).name,
                     })
                 })
             }
@@ -50,6 +51,7 @@ const TableMarketShareAll = () => {
             })
             setCountMonth(countForMonth)
             setData(arr)
+            setLoadDataDone(true)
         })
     }, [])
 
@@ -57,7 +59,6 @@ const TableMarketShareAll = () => {
 
         let objArray = [
             ['Бренд', 'янв.', 'фев.', 'март', 'апр.', 'май', 'июнь', 'июль', 'авг.', 'сен.', 'окт.', 'ноя.', 'дек.', 'ИТОГО'],
-
         ]
         brandModel.IsBrand.forEach(el => {
             objArray.push([el.name, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',])
@@ -97,32 +98,38 @@ const TableMarketShareAll = () => {
 
 
     return (
-        <div style={{ marginTop: 20 }}>
+        <>
+            {
+                data && brandModel.IsBrand
+                    ?
 
-            <div className={s.table}>
-                <div style={{
-                    borderBottom: 'solid 1px grey',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                }}>
-                    <h3 style={{ paddingBottom: '10px', paddingLeft: 15 }} >Процентная доля рынка всех  брендов</h3>
-                    <Button variant={"outline-light"} onClick={download}>Скачать стастистику</Button>
+                <div style={{ marginTop: 15 }}>
+                    <div className={s.table}>
+                        <div style={{
+                            borderBottom: 'solid 1px grey',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            alignItem:'center',
+                            paddingBottom:'15px'
+                        }}>
+                            <h3 style={{ paddingLeft: 0 ,marginBottom:0,}} >Процентная доля рынка всех  брендов</h3>
+                            <Button variant={"outline-light"} onClick={download}>Скачать стастистику</Button>
+                        </div>
+                        <TableHeadRowMarketAll />
+                        <div className={s.table_body + ' brand_body'} style={{ display: 'grid' }}>
+                            {
+                                data ? brandModel.IsBrand.map(({ id, name }) =>
+                                    <TableBodyRowMarketAll countMonth={countMonth} load={load} setLoad={setLoad} key={id} brand_id={id} brand_name={name} data={data.filter(item => item.brand_id === id)} />
+                                ) : false
+                            }
+                        </div>
+                    </div>
                 </div>
-                <TableHeadRowMarketAll />
-                <div className={s.table_body + ' brand_body'} style={{ display: 'grid' }}>
-                    {
-                        data ? brandModel.IsBrand.map(({ id, name }) =>
-                            <TableBodyRowMarketAll countMonth={countMonth} load={load} setLoad={setLoad} key={id} brand_id={id} brand_name={name} data={data.filter(item => item.brand_id === id)} />
-                        ) : false
-                    }
-
-                </div>
-
-            </div>
-
-        </div>
-
+                    :
+                    <Spinner animation={"grow"}/>
+            }
+        </>
     );
 };
 

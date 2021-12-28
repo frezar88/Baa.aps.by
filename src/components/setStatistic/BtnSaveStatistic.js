@@ -4,7 +4,7 @@ import {Button} from "react-bootstrap";
 const BtnSaveStatistic = (props) => {
     return (
         <div className="d-flex justify-content-center">
-            <Button onClick={(e)=>props.callback(e)} variant={"success"}>Сохранить
+            <Button onClick={(e)=>props.callback(e)} variant={"primary"}>Сохранить
                 статистику</Button>
         </div>
     );

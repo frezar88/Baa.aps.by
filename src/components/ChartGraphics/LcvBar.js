@@ -79,28 +79,43 @@ const LcvBar = (props) => {
             try {
                 getAllStatisticLcvOrPcForGraphicsMonth(props.from, props.to).then(data => {
 
+                    let models = data.data.included.models.map((m)=>({...m, brand : data.data.included.brands.find((b)=>m.brand_id === b.id)}))
+                    let cars = data.data.included.cars.map((c) => ({...c,model: models.find((m) => c['model_id'] === m.id)
+                    }))
+                    let result = data.data.data.map((el) => ({...el, car: cars.find((c) => c.id === el.car_id)}))
 
                     let temporary = 0
-                    data.data.forEach(el => {
+                    data.data.data.forEach(el => {
                         temporary += +el.value
                     })
 
                     setTotalSum(temporary)
+                    console.log(result)
 
-                    data.data.filter(item => item.car['car_type'].name === 'LCV').sort(function (a, b) {
+                    result.filter((item)=>+item.car['car_type_id'] === 2).sort(function (a, b) {
                         return b.value - a.value
                     }).forEach(el => {
                         if (labels.length < 20) {
-                            let sub = ''
-                            if (el.car['car_subtype']) {
-                                sub = el.car['car_subtype'].name
-                            }
-                            labels.push(el.car.model.brand.name + ' ' + el.car.name + ' ' + sub)
 
+                            labels.push(el.car.model.brand.name + ' ' + el.car.name)
 
                             count.push(el.value)
                         }
                     })
+                    // result.filter(item => item.car['car_type_id'].name === '2').sort(function (a, b) {
+                    //     return b.value - a.value
+                    // }).forEach(el => {
+                    //     if (labels.length < 20) {
+                    //         let sub = ''
+                    //         if (el.car['car_subtype_id']) {
+                    //             sub = el.car['car_subtype_id']
+                    //         }
+                    //         labels.push(el.car.model.brand.name + ' ' + el.car.name + ' ' + sub)
+                    //
+                    //
+                    //         count.push(el.value)
+                    //     }
+                    // })
 
                 }).finally(() => {
                     setLabels(labels)

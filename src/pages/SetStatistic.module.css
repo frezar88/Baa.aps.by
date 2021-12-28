@@ -39,6 +39,7 @@ tbody{
     /*transition: .3s;*/
     font-weight: 500;
 }
+
  .table_block tbody td:hover{
     background: #000000;
      color: #fff;
@@ -53,7 +54,7 @@ tbody{
     border:none;
     /*transition: .3s;*/
     font-size: 17px;
-    font-weight: 500;
+    font-weight: normal;
 }
 .table_block tbody td:hover input{
     background: #000000;

@@ -23,6 +23,8 @@ const App =observer( () => {
             check(localStorage.getItem('refresh')).then(data=>{
                 user.setIsAuth(true)
                 user.setUser(data)
+                user.setUserRole(data.role)
+
             }).finally(()=>setLoading(false))
         }else{
             return setLoading(false)
@@ -34,7 +36,9 @@ const App =observer( () => {
     }
 
 
-    bands().then((data) => brandModel.setBrand(data.data))
+    bands().then((data) => {
+        brandModel.setBrand(data.data.data)
+    })
     if (user.IsAuth === true) {
 
         carTypes().then((data) => brandModel.setCarType(data.data))

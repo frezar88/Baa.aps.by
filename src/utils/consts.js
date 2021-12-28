@@ -10,6 +10,11 @@ export const BODY_ROUTE = '/';
 export const SUCCESS = '/success';
 export const SUCCESS_SEND_STATISTIC = '/success-send-statistic';
 export const SUCCESS_SEND_FEEDBACK = '/success-feedback';
+export const PROFILE = '/profile';
+export const EDIT_PROFILE = '/edit-profile';
+export const EDIT_PASSWORD = '/edit-password';
+export const SUCCESS_SEND_NEW_PASSWORD = '/success-send-password';
+export const SUCCESS_SEND_PERSONAL_DATA = '/success-send-personal-data';
 
 
 export const COLORS_COMPARE_BLOCK = ['#ff0000','#f15f5f','#f5b4b4','#f5dcb4','#00fbf4','#ffca49','#ffb500','#bcff00','#d2f966','#5e8100','#810000','#46ff00','#2fa702','#00ffb1',

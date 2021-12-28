@@ -5,27 +5,33 @@ import TableBodyRow from "./components/brand/TableBodyRow";
 import {Context} from "../../../index";
 import {getAllStatistic} from "../../../http/brandAPI";
 import TableFooterRow from "./components/brand/TableFooterRow";
-import {Button} from "react-bootstrap";
+import {Button, Spinner} from "react-bootstrap";
 
-const TableBrand = () => {
+const TableBrand = ({setLoadDataDone, setStateBrand, stateBrand}) => {
     const {brandModel} = useContext(Context)
     const [load, setLoad] = useState(false)
 
     const [data, setData] = useState()
+
     useEffect(() => {
+
         getAllStatistic().then((data) => {
             let arr = []
-            for (let dataKey in data.data) {
-                data.data[dataKey].forEach(el => {
+            for (let dataKey in data.data.data) {
+                data.data.data[dataKey].forEach(el => {
                     arr.push({
                         'date': dataKey,
                         'value': el.value,
-                        'brand_id': el.brand.id,
-                        'brand_name': el.brand.name,
+                        'brand_id': el['brand_id'],
+                        'brand_name': data.data.included.brands.find((b)=>b.id === el.brand_id).name,
                     })
+
                 })
             }
             setData(arr)
+            setLoadDataDone(true)
+            // setStateBrand(arr)
+
         })
     }, [])
 
@@ -37,14 +43,14 @@ const TableBrand = () => {
         ]
         brandModel.IsBrand.forEach(el => {
             objArray.push([el.name, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',])
-            let totalSum=0
+            let totalSum = 0
             data.filter(item => item.brand_name === el.name).forEach(el2 => {
                 let numberMonth = new Date(+el2.date * 1000).toLocaleDateString('en', {month: 'numeric'})
-                totalSum+= +el2.value
+                totalSum += +el2.value
                 objArray.forEach(el3 => {
-                    if (el3.indexOf(el2.brand_name) !== -1){
+                    if (el3.indexOf(el2.brand_name) !== -1) {
                         el3[numberMonth] = el2.value
-                        el3[13]=+totalSum
+                        el3[13] = +totalSum
                     }
                 })
             })
@@ -68,38 +74,55 @@ const TableBrand = () => {
         a.setAttribute('download', 'brand.csv');
         window.document.body.appendChild(a);
         a.click();
-
-
     }
     return (
-        <div style={{marginTop: 20}}>
-            <div style={{
-                borderBottom: 'solid 1px grey',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-            }}>
-                <h3 style={{paddingBottom: '10px', paddingLeft: 15}}>Полная статистика брендов</h3>
-                <Button variant={"outline-light"} onClick={download}>Скачать стастистику</Button>
-            </div>
+        <>
+            {
+                data && brandModel.IsBrand || stateBrand[0] ?
 
-            <div className={s.table}>
-                <TableHeadRow/>
-                <div className={s.table_body + ' brand_body'} style={{display: 'grid'}}>
-                    {
-                        data ? brandModel.IsBrand.map(({id, name}) =>
-                            <TableBodyRow load={load} setLoad={setLoad} key={id} brand_id={id} brand_name={name}
-                                          data={data.filter(item => item.brand_id === id)}/>
-                        ) : false
-                    }
+                    <div style={{marginTop: 15}}>
+                        <div style={{
+                            borderBottom: 'solid 1px grey',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            alignItem:'center',
+                            paddingBottom:'15px'
+                        }}>
+                            <h3 style={{paddingLeft: 0 ,marginBottom:0,}}>Полная статистика брендов</h3>
+                            <Button variant={"outline-light"} onClick={download}>Скачать стастистику</Button>
+                        </div>
 
-                </div>
+                        <div className={s.table}>
+                            <TableHeadRow/>
+                            <div className={s.table_body + ' brand_body'} style={{display: 'grid'}}>
+                                {
+                                    stateBrand[0] ?
 
-                <div className={s.table_footer}>
-                    <TableFooterRow load={load}/>
-                </div>
-            </div>
-        </div>
+                                        stateBrand ? brandModel.IsBrand.map(({id, name}) =>
+                                            <TableBodyRow load={load} setLoad={setLoad} key={id} brand_id={id}
+                                                          brand_name={name}
+                                                          data={stateBrand.filter(item => item.brand_id === id)}/>
+                                        ) : false
+                                        :
+                                        data ? brandModel.IsBrand.map(({id, name}) =>
+                                            <TableBodyRow load={load} setLoad={setLoad} key={id} brand_id={id}
+                                                          brand_name={name}
+                                                          data={data.filter(item => item.brand_id === id)}/>
+                                        ) : false
+                                }
+                            </div>
+
+                            <div className={s.table_footer}>
+                                <TableFooterRow load={load}/>
+                            </div>
+                        </div>
+                    </div>
+                    :
+                    <Spinner animation={"grow"}/>
+            }
+        </>
+
 
     );
 };

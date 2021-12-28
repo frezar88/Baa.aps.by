@@ -58,18 +58,20 @@ const BrandBar = (props) => {
         if (props.from && props.from !== 'Thu Jan 01 1970 03:00:00 GMT+0300 (Moscow Standard Time)') {
             try {
                 getAllStatisticForGraphicsMonth(props.from, props.to).then(data => {
+
+
                     setTotalSum(0)
                     let temporary = 0
-                    data.data.forEach(el => {
+                    data.data.data.forEach(el => {
                         temporary += +el.value
                     })
 
                     setTotalSum(temporary)
-                    data.data.sort(function (a, b) {
+                    data.data.data.sort(function (a, b) {
                         return a.value - b.value
                     }).reverse().forEach(el => {
-                        if (el.value >= 100 && labels.length < 10) {
-                            labels.push(el.brand.name)
+                        if (labels.length < 10) {
+                            labels.push(data.data.included.brands.find((b)=>b.id === el.brand_id).name)
                             count.push(el.value)
                         }
 
@@ -123,9 +125,7 @@ const BrandBar = (props) => {
                                     let interestCount = "Доля рынка: " + (+numberTooltip / totalSum * 100 + '').slice(0, 4) + '%'
                                     return [currentCount, interestCount]
                                 },
-
                             }
-
                         },
                         legend: {
                             display: true,
@@ -149,8 +149,6 @@ const BrandBar = (props) => {
 
                         }
                     },
-
-
                 }} data={data21}/>
 
 

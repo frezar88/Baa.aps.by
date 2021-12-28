@@ -22,7 +22,7 @@ const CompareTopBlockBrandsList = (props) => {
 
     useEffect(() => {
         bands().then(data => {
-            setAllBrands(data.data)
+            setAllBrands(data.data.data)
         })
     }, [])
 
@@ -52,6 +52,8 @@ const CompareTopBlockBrandsList = (props) => {
 
         props.setSelectedBrands(currentBrands.filter(item => item.brand_name))
 
+
+
     }, [firstItemValue, secondItemValue, thirdItemValue, fourthItemValue, firstColor, secondColor, thirdColor, fourthColor])
     return (
         <div style={{padding:'0 16px'}}>
@@ -64,9 +66,9 @@ const CompareTopBlockBrandsList = (props) => {
                                 setColor={setFirstColor}
                                 brands={
                                     allBrands.filter(item =>
-                                        item.id !== +secondItemValue.slice(0, secondItemValue.indexOf(' '))
-                                        && item.id !== +thirdItemValue.slice(0, thirdItemValue.indexOf(' '))
-                                        && item.id !== +fourthItemValue.slice(0, fourthItemValue.indexOf(' '))
+                                        +item.id !== +secondItemValue.slice(0, secondItemValue.indexOf(' '))
+                                        && +item.id !== +thirdItemValue.slice(0, thirdItemValue.indexOf(' '))
+                                        && +item.id !== +fourthItemValue.slice(0, fourthItemValue.indexOf(' '))
                                     )
                                 }
                                 setValue={setFirstItemValue}
@@ -77,9 +79,9 @@ const CompareTopBlockBrandsList = (props) => {
                                 setColor={setSecondColor}
                                 brands={
                                     allBrands.filter(item =>
-                                        item.id !== +firstItemValue.slice(0, firstItemValue.indexOf(' '))
-                                        && item.id !== +thirdItemValue.slice(0, thirdItemValue.indexOf(' '))
-                                        && item.id !== +fourthItemValue.slice(0, fourthItemValue.indexOf(' '))
+                                        +item.id !== +firstItemValue.slice(0, firstItemValue.indexOf(' '))
+                                        && +item.id !== +thirdItemValue.slice(0, thirdItemValue.indexOf(' '))
+                                        && +item.id !== +fourthItemValue.slice(0, fourthItemValue.indexOf(' '))
                                     )
                                 }
                                 setValue={setSecondItemValue}
@@ -90,9 +92,9 @@ const CompareTopBlockBrandsList = (props) => {
                                 setColor={setThirdColor}
                                 brands={
                                     allBrands.filter(item =>
-                                        item.id !== +secondItemValue.slice(0, secondItemValue.indexOf(' '))
-                                        && item.id !== +firstItemValue.slice(0, firstItemValue.indexOf(' '))
-                                        && item.id !== +fourthItemValue.slice(0, fourthItemValue.indexOf(' '))
+                                        +item.id !== +secondItemValue.slice(0, secondItemValue.indexOf(' '))
+                                        && +item.id !== +firstItemValue.slice(0, firstItemValue.indexOf(' '))
+                                        && +item.id !== +fourthItemValue.slice(0, fourthItemValue.indexOf(' '))
                                     )
                                 }
                                 setValue={setThirdItemValue}
@@ -103,9 +105,9 @@ const CompareTopBlockBrandsList = (props) => {
                                 setColor={setFourthColor}
                                 brands={
                                     allBrands.filter(item =>
-                                        item.id !== +secondItemValue.slice(0, secondItemValue.indexOf(' '))
-                                        && item.id !== +thirdItemValue.slice(0, thirdItemValue.indexOf(' '))
-                                        && item.id !== +firstItemValue.slice(0, firstItemValue.indexOf(' '))
+                                        +item.id !== +secondItemValue.slice(0, secondItemValue.indexOf(' '))
+                                        && +item.id !== +thirdItemValue.slice(0, thirdItemValue.indexOf(' '))
+                                        && +item.id !== +firstItemValue.slice(0, firstItemValue.indexOf(' '))
                                     )
                                 }
                                 setValue={setFourthItemValue}

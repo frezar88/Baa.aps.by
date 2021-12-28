@@ -2,8 +2,6 @@ import React from 'react';
 import RowForItemShowData from "./RowForItemShowData";
 
 const ItemForShowDataWait = (props) => {
-
-
     return (
         <div>
             <div className={'p-2'} style={{borderBottom:'solid 1px grey'}} >

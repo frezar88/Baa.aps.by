@@ -79,25 +79,38 @@ const PcBar = (props) => {
         if (props.from && props.from !=='Thu Jan 01 1970 03:00:00 GMT+0300 (Moscow Standard Time)') {
             try {
                 getAllStatisticLcvOrPcForGraphicsMonth(props.from, props.to).then(data => {
+                    let models = data.data.included.models.map((m)=>({...m, brand : data.data.included.brands.find((b)=>m.brand_id === b.id)}))
+                    let cars = data.data.included.cars.map((c) => ({...c,model: models.find((m) => c['model_id'] === m.id)
+                    }))
+                    let result = data.data.data.map((el) => ({...el, car: cars.find((c) => c.id === el.car_id)}))
 
                     let temporary = 0
-                    data.data.forEach(el=>{
+                    data.data.data.forEach(el=>{
                         temporary+=+el.value
                     })
 
                     setTotalSum(temporary)
-
-                    data.data.filter(item => item.car['car_type'].name === 'PC').sort(function (a, b) {
+                    result.filter((item)=>+item.car['car_type_id'] === 1).sort(function (a, b) {
                         return b.value - a.value
                     }).forEach(el => {
                         if (labels.length < 20) {
 
-                            labels.push(el.car.model.brand.name + ' ' + el.car.name + ' ' + el.car['car_type'].name)
-
+                            labels.push(el.car.model.brand.name + ' ' + el.car.name)
 
                             count.push(el.value)
                         }
                     })
+                    // result.filter(item => +item.car['car_type_id'].name === 1).sort(function (a, b) {
+                    //     return b.value - a.value
+                    // }).forEach(el => {
+                    //     if (labels.length < 20) {
+                    //
+                    //         labels.push(el.car.model.brand.name + ' ' + el.car.name + ' ' + el.car['car_type'].name)
+                    //
+                    //
+                    //         count.push(el.value)
+                    //     }
+                    // })
 
                 }).finally(() => {
                     setLabels(labels)

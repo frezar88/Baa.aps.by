@@ -8,41 +8,49 @@ import SelectBrandAndYear from "../components/setStatistic/SelectBrandAndYear";
 
 import Table from "../components/setStatistic/Table";
 import {getCars, getStatic} from "../http/brandAPI";
-import {useHistory} from "react-router-dom";
-
-
-
 const SetStatistic = () => {
     const {user} = useContext(Context)
-    const history=useHistory()
     const [stateSelectYear, setSelectStateYear] = useState('1609448400')
     const [stateSelectBrand, setSelectStateBrand] = useState()
     const [loadSelect, setLoadSelect] = useState(false)
     const [allModel, setAllModel] = useState()
     const [allModelSalesValue, setAllModelSalesValue] = useState()
+
     useEffect(() => {
         if (loadSelect) {
             getCars().then(data => {
+                let models = data.data.included.models.map((m) => ({...m, brand: data.data.included.brands.find((b) => b.id === m.brand_id)}));
+                let result = data.data.data.map((el) => ({...el, model: models.find((m) => el.model_id === m.id)}));
 
-                setAllModel(data.data.filter(item => item.model.brand.id === +stateSelectBrand && item['on_sale']))
+
+                setAllModel(result.filter(item => +item.model.brand.id === +stateSelectBrand && item['on_sale']))
             })
             getStatic().then(data => {
-                setAllModelSalesValue(data.data)
+
+                let cars = data.data.included.cars.map((c)=>({...c,models: data.data.included.models.find((m) => m.id === c.model_id)}))
+                let result = data.data.data.map((el)=>({...el,cars:cars.find((c) => el.car_id === c.id)}))
+                console.log(result)
+                setAllModelSalesValue(result)
             })
+
         }
     }, [loadSelect,stateSelectBrand])
 
 
     return (
-        <div className='d-flex flex-column overflow-hidden' style={{zIndex: '22', minHeight: '100vh'}}>
+        // <div className='d-flex flex-column overflow-hidden' style={{zIndex: '22', minHeight: 'calc(100vh - 70px)',background:'rgb(8 8 8 / 20%)'}}>
+        <div className='d-flex flex-column overflow-hidden' style={{zIndex: '22', minHeight: 'calc(100vh - 70px)',background:'#fff'}}>
             <div style={{marginTop: '3%'}}>
                 <Container
                     style={{
                         color: '#fff',
-                        backgroundColor: 'rgb(8 8 8 / 80%)',
+                        // backgroundColor: 'rgb(8 8 8 / 80%)',
+                        backgroundColor: '#666666',
                         marginTop: '222', minHeight: 500,
                         borderRadius: 10, padding: '10px 25px',
                     }}>
+
+
                     <RepresentativeBlock dealer={user.User.dealer}/>
                     <SelectBrandAndYear loadComponents={setLoadSelect} stateBrand={setSelectStateBrand}
                                         stateYear={setSelectStateYear}/>
@@ -54,7 +62,6 @@ const SetStatistic = () => {
                                 allModel={allModel}
                                 allModelSalesValue={allModelSalesValue}
                                 stateSelectYear={stateSelectYear}
-
                             />
                             :
                             <Spinner animation={"grow"}/>

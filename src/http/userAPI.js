@@ -1,4 +1,4 @@
-import {$host} from "./index";
+import {$host,$authHost} from "./index";
 import jwtDecode from "jwt-decode";
 
 export const registration =async (name,email,password,phone,dealer,brands)=>{
@@ -20,5 +20,14 @@ export const check =async (token)=>{
     localStorage.setItem('token',data.access)
     return jwtDecode(data.access)
 
+}
+
+export const sendNewPassword = async (pass) => {
+    const response = await $authHost.post(`/server/user/restore-password`,{'password':pass})
+    return response
+}
+export const updateUserData = async (data) => {
+    const response = await $authHost.patch(`/server/update-user-data`,data)
+    return response
 }
 

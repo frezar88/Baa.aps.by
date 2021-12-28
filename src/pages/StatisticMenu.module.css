@@ -1,6 +1,5 @@
 .grid_menu{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 20px;
     justify-content: center;
     align-items: center;
@@ -24,6 +23,28 @@
     color: #fff;
 }
 
+.block.blocked{
+    background: grey !important;
+    border: solid 1px black;
+    pointer-events: none;
+}
+
+.text{
+    position:absolute;
+    bottom:-6px;
+    text-decoration:underline;
+    color:rgb(223 0 0);
+    text-decoration-color:rgb(223 0 0);
+    font-weight:bold;
+    font-size:13px;
+    text-align: center;
+}
+
+@media(max-width: 900px){
+    .text{
+        font-size: 12px;
+    }
+}
 @media (max-width: 590px){
     .buttons> div{
         left: calc(50% - 160px)  !important;
