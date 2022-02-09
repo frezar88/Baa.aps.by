@@ -5,7 +5,7 @@
 .table_head{
     padding: 10px 0;
     display: grid;
-    grid-template-columns: 150px repeat(12 , 1fr) 70px;
+    grid-template-columns: 30px 150px repeat(12 , 1fr) 70px;
 }
 .table_head{
     position: relative;

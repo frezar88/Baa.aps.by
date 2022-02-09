@@ -3,9 +3,10 @@ import s from "./TableModel.module.css";
 import TableHeadModelRow from "./components/model/TableHeadModelRow";
 import TableBodyModelRow from "./components/model/TableBodyModelRow";
 import {getAllStatisticModel, getAllStatisticModelValue} from "../../../http/brandAPI";
-import {Button, Spinner} from "react-bootstrap";
+import {Button, Form, Spinner} from "react-bootstrap";
 import TableFooterModelRow from "./components/model/TableFooterModelRow";
 import {Context} from "../../../index";
+import {CURRENT_YEAR_MONTH} from "../../../utils/consts";
 
 
 const TableModel = ({setLoadDataDone, setStateModelAll, stateModelAll}) => {
@@ -15,8 +16,12 @@ const TableModel = ({setLoadDataDone, setStateModelAll, stateModelAll}) => {
     const [load1, setLoad1] = useState(false)
     const [load2, setLoad2] = useState(false)
     const [load, setLoad] = useState(false)
+    const [stateYear, setStateYear] = useState(CURRENT_YEAR_MONTH.january)
+    const [loadDateLocal, setLoadDateLocal] = useState(false)
+
     useEffect(() => {
         getAllStatisticModel().then(data => {
+
             let cars = data.data.included.cars.map((c) => ({
                 ...c, model: data.data.included.models.find((m) => c['model_id'] === m.id)
             }))
@@ -33,7 +38,7 @@ const TableModel = ({setLoadDataDone, setStateModelAll, stateModelAll}) => {
     }, [])
 
     useEffect(() => {
-        getAllStatisticModelValue().then(data => {
+        getAllStatisticModelValue(stateYear).then(data => {
 
             let arr = []
             for (let dataKey in data.data.data) {
@@ -46,19 +51,18 @@ const TableModel = ({setLoadDataDone, setStateModelAll, stateModelAll}) => {
 
                 })
             }
-
             setCarsValue(arr)
             setLoad2(true)
             setLoadDataDone(true)
             let cloneArr = Object.assign({}, stateModelAll)
             cloneArr.carsValue = arr
             // setStateModelAll(cloneArr)
+            setLoadDateLocal(true)
         })
-    }, [])
+    }, [stateYear])
 
 
     const typef = (car) => {
-        console.log(car)
         if (+car === 1) {
             return 'PC'
         } else if (+car === 2) {
@@ -74,33 +78,39 @@ const TableModel = ({setLoadDataDone, setStateModelAll, stateModelAll}) => {
             ['Тип', 'Бренд', 'Модель', 'янв.', 'фев.', 'март', 'апр.', 'май', 'июнь', 'июль', 'авг.', 'сен.', 'окт.', 'ноя.', 'дек.', 'ИТОГО', ' '],
 
         ]
-
-        carList.forEach(el => {
-            let brandName = brandModel.IsBrand.find((item) => item.id === el.car.model.brand_id)
-            objArray.push([typef(el.car['car_type_id']), brandName.name, el.car.name, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', el.car.id])
+        carList.filter(item => item.value !=='0').forEach(el => {
+            let brandName = brandModel.IsBrand.find((item) => item.id == el.car.model.brand_id)
             let totalSum = 0
-            carsValue.filter(item => item.car_id === el.car.id).forEach(el2 => {
-                let numberMonth = new Date(+el2.date * 1000).toLocaleDateString('en', {month: 'numeric'})
 
+            carsValue.filter(item => item.car_id === el.car.id)
+                .filter(item => +item['date'] >= +stateYear && stateYear == CURRENT_YEAR_MONTH.january ? +item['date']: +item['date']<= 1638306000 )
+                .filter(item => item.value !=='0').forEach(el2 => {
                 totalSum += +el2.value
-                objArray.forEach(el3 => {
-                    if (el3.indexOf(el2.car_id) !== -1 && el3.indexOf(el2.car_id) !== -1) {
-                        el3[+numberMonth + 2] = el2.value
-                        el3[15] = +totalSum
-                    }
-                })
+                el[13] = +totalSum
+            })
+            objArray.push([typef(el.car['car_type_id']), brandName.name, el.car.name, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', totalSum, el.car.id])
+        })
+        carsValue.filter(item => +item['date'] >= +stateYear && stateYear == CURRENT_YEAR_MONTH.january ? +item['date']: +item['date']<= 1638306000).filter(item => item.value && item.value !== '0').forEach(el => {
+            let numberMonth = new Date(+el.date * 1000).toLocaleDateString('en', {month: 'numeric'})
+            objArray.forEach(el3 => {
+                if (el3[16] == el.car_id)  {
+                    el3[+numberMonth + 2] = el.value
+                }
             })
         })
+        let tempArr=[]
         objArray.sort(function (a, b) {
             return b[15] - a[15]
         })
-        let sortObjArray2 = []
-        objArray.forEach(el => {
-            sortObjArray2.push(el.slice(0, el.length - 1))
+        objArray.forEach(el=>{
+            tempArr.push(el.slice(0,el.length-1))
         })
 
-
-        let array = typeof sortObjArray2 != 'object' ? JSON.parse(sortObjArray2) : sortObjArray2;
+        let array = typeof tempArr != 'object' ? JSON.parse(tempArr) : tempArr;
+        let x = 0
+        array.forEach(el => {
+            el.unshift(x++)
+        })
         let str = '';
         for (let i = 0; i < array.length; i++) {
             let line = [];
@@ -118,6 +128,7 @@ const TableModel = ({setLoadDataDone, setStateModelAll, stateModelAll}) => {
         a.click();
     }
 
+
     return (
         <>
             {
@@ -131,29 +142,80 @@ const TableModel = ({setLoadDataDone, setStateModelAll, stateModelAll}) => {
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
                                 alignItem: 'center',
-                                paddingBottom: '15px'
-                            }}>
-                                <h3 style={{paddingLeft: 0, marginBottom: 0,}}>Статистика всех моделей</h3>
-                                <Button variant={"outline-light"} onClick={download}>Скачать стастистику</Button>
-                            </div>
-                            <TableHeadModelRow/>
-                            <div className={s.table_body + ' model_body'} style={{display: 'grid'}}>
-                                {
-                                    load1 && load2 && carList[0] ?
+                                paddingBottom: '15px',
+                                order: '-3',
 
-                                        carList.filter(item=>item.value !=='0').map(({car,value}) =>
-                                            <TableBodyModelRow
-                                                key={car.id} car={car} value={value}
-                                                data={carsValue.filter(item => item['car_id'] === car.id)}
-                                                load={load} setLoad={setLoad}
-                                            />
-                                        )
-                                        : <Spinner animation={'grow'}/>
-                                }
+                            }}>
+                                <div>
+                                    <h3 style={{paddingLeft: 0, marginBottom: 0,}}>Статистика всех моделей</h3>
+                                </div>
+
+                                <div style={{display: 'flex', alignItems: 'center', gridGap: '20px'}}>
+                                    <Button variant={"outline-light"} onClick={download}>Скачать таблицу</Button>
+                                    <div>
+                                        <Form>
+                                            <Form.Select defaultValue={stateYear} onChange={(e) => {
+                                                setStateYear(e.target.value)
+                                                setLoadDateLocal(false)
+                                            }
+                                            }>
+                                                <option value={CURRENT_YEAR_MONTH.january}>2022</option>
+                                                <option value={'1609448400'}>2021</option>
+                                            </Form.Select>
+                                        </Form>
+                                    </div>
+                                </div>
                             </div>
-                            <div className={s.table_footer}>
-                                <TableFooterModelRow load={load}/>
-                            </div>
+
+                               {
+                                   loadDateLocal
+                                   ?
+                                       <>
+                                           <div style={{order: -2}}>
+                                               <TableHeadModelRow stateYear={stateYear}/>
+                                           </div>
+                                           <div style={{display: 'grid', gridTemplateColumns: '30px 1fr',}}>
+                                               <div>
+                                                   {
+                                                       load1 && load2 && carList[0] ?
+                                                           carList.filter(item => item.value !=='0').map((currElement, index) =>
+                                                               <div style={{
+                                                                   display: 'flex',
+                                                                   alignItems: 'center',
+                                                                   fontSize: '16px',
+                                                                   borderBottom: '1px solid rgb(102, 102, 102)',
+                                                                   padding: '10px 0'
+                                                               }}>{index + 1}</div>
+                                                           )
+                                                           : false
+
+                                                   }
+                                               </div>
+                                               <div className={s.table_body + ' model_body'} style={{display: 'grid'}}>
+                                                   {
+                                                       load1 && load2 && carList[0] ?
+
+                                                           carList.filter(item => item.value !== '0' && item.value).map(({car, value}) =>
+                                                               <TableBodyModelRow
+                                                                   stateYear={stateYear}
+                                                                   key={car.id} car={car} value={value}
+                                                                   data={carsValue.filter(item => item['car_id'] === car.id).filter(item=>stateYear == CURRENT_YEAR_MONTH.january? item: +item.date < 1640984400 )}
+                                                                   load={load} setLoad={setLoad}
+                                                               />
+                                                           )
+                                                           : <Spinner animation={'grow'}/>
+                                                   }
+                                               </div>
+                                           </div>
+                                           <div className={s.table_footer}>
+                                               <TableFooterModelRow stateYear={stateYear} load={load}/>
+                                           </div>
+                                       </>
+                                       :
+                                       <Spinner animation={"grow"}/>
+                               }
+
+
                         </div>
                     </div>
                     :

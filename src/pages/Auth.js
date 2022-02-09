@@ -10,6 +10,7 @@ import {Context} from "../index";
 import {addMaskFromInputCallBackForm, addSelect, validateEmail} from "../utils/functions";
 import {login, registration} from "../http/userAPI";
 import {bands} from "../http/brandAPI";
+import img from '../Screenshot_2.png'
 
 
 
@@ -24,7 +25,8 @@ const Auth =  () => {
     const {user} = useContext(Context)
     const history = useHistory()
     const location = useLocation()
-    const isLogin = location.pathname === LOGIN_ROUTE;
+    const isLogin = location.pathname === REGISTRATION_ROUTE;
+    console.log(isLogin)
     let brands = []
     const [errorRegisterText, setErrorRegisterText] = useState('')
     const [errorLoginText, setErrorLoginText] = useState('')
@@ -71,17 +73,31 @@ const Auth =  () => {
     },[])
 
     return (
-        <>
+        <div>
             {
                 brandR[0]?
                     <>
                         <div style={{backgroundColor: '#00000094'}}>
-                            <Container className="d-flex justify-content-center align-items-center"
+                            <Container style={{
+                                position:'absolute',
+                                backgroundImage: `url(${img})`,
+                                zIndex: -21,
+                                backgroundRepeat: 'no-repeat',
+                                backgroundSize: 'cover',
+                                padding: '15px',
+                                width: '100%',
+                                height: 'calc(100vh - 70px) ',
+                                filter: 'blur(0.4rem)',
+                                left:'calc(50% - 660px)'
+                            }}>
+
+                            </Container>
+                            <Container style={{zIndex:111111}} className="d-flex justify-content-center align-items-center"
                                        style={{height: window.innerHeight - 70}}>
-                                { isLogin ?
+                                { !isLogin ?
                                     <Card style={{width: 600 }} className="p-5 ">
                                         <h2 style={{textAlign: 'center', color: 'red', fontSize: '16px'}}>{errorLoginText}</h2>
-                                        <h2 className="m-auto">{isLogin ? 'Авторизация' : 'Регистрация'}</h2>
+                                        <h2 className="m-auto">{!isLogin ? 'Авторизация' : 'Регистрация'}</h2>
                                         <Form onKeyDown={
                                             (e)=>{
                                                 if(e.keyCode ===13){
@@ -125,22 +141,20 @@ const Auth =  () => {
                                                 className="mt-3 "
                                                 placeholder="Введите ваш пароль..."/>
                                             <div className='d-flex justify-content-between align-items-center'>
-                                                <div style={{fontWeight: '500'}}>{isLogin ? 'Нет аккаунта?' : 'Есть аккаунт?'}
-                                                    <NavLink className="ms-2"
-                                                             to={isLogin ? REGISTRATION_ROUTE : LOGIN_ROUTE}>{isLogin ? 'Зарегистрируйтесь' : 'Войдите'}</NavLink>
-                                                </div>
+                                                {/*<div style={{fontWeight: '500'}}>{isLogin ? 'Нет аккаунта?' : 'Есть аккаунт?'}*/}
+                                                    {/*<NavLink className="ms-2"*/}
+                                                    {/*         to={isLogin ? REGISTRATION_ROUTE : LOGIN_ROUTE}>{isLogin ? 'Зарегистрируйтесь' : 'Войдите'}</NavLink>*/}
+                                                {/*</div>*/}
                                                 <Button disabled={loginEmail && loginPassword ? false : true} onClick={() => {
-
-
                                                     singIn().then()
-                                                }} className="mt-3 + enter" variant={errorLoginText ? 'danger' : "primary"}>Вход в аккаунт </Button>
+                                                }} style={{marginLeft:'auto'}} className="mt-3 + enter" variant={errorLoginText ? 'danger' : "primary"}>Вход в аккаунт </Button>
                                             </div>
                                         </Form>
                                     </Card>
                                     :
                                     <Card style={{width: 600 ,overflow:"auto",maxHeight:'100%'}} className="p-5 ">
                                         <h2 style={{textAlign: 'center', color: 'red', fontSize: '16px'}}>{errorRegisterText}</h2>
-                                        <h2 className="m-auto">{isLogin ? 'Авторизация' : 'Регистрация'}</h2>
+                                        <h2 className="m-auto">{!isLogin ? 'Авторизация' : 'Регистрация'}</h2>
                                         <Form onChange={() => {
                                             let input = document.getElementById('reg_phone')
                                             if (input) {
@@ -237,9 +251,9 @@ const Auth =  () => {
                                                 </div>
                                             </div>
                                             <div className='d-flex justify-content-between align-items-center'>
-                                                <div style={{fontWeight: '500'}}>{isLogin ? 'Нет аккаунта?' : 'Есть аккаунт?'}
+                                                <div style={{fontWeight: '500'}}>{!isLogin ? 'Нет аккаунта?' : 'Есть аккаунт?'}
                                                     <NavLink className="ms-2"
-                                                             to={isLogin ? REGISTRATION_ROUTE : LOGIN_ROUTE}>{isLogin ? 'Зарегистрируйтесь' : 'Войдите'}</NavLink>
+                                                             to={!isLogin ? REGISTRATION_ROUTE : LOGIN_ROUTE}>{!isLogin ? 'Зарегистрируйтесь' : 'Войдите'}</NavLink>
                                                 </div>
 
                                                 <Button type={'submit'} disabled={
@@ -269,7 +283,7 @@ const Auth =  () => {
                     <Spinner animation={"grow"}/>
             }
 
-        </>
+        </div>
 
 
     );

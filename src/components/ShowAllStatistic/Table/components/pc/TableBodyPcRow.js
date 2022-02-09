@@ -1,9 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
 import s from "../../TableModel.module.css";
 import {Context} from "../../../../../index";
+import {CURRENT_YEAR_MONTH, PREVIOUS_YEAR_MONTH} from "../../../../../utils/consts";
 
 
-const TableBodyPcRow = ({car,data,key,load,setLoad}) => {
+const TableBodyPcRow = ({car,data,key,load,setLoad,stateYear}) => {
     const {brandModel} = useContext(Context)
     let brandName = brandModel.IsBrand.find((item) => item.id === car.model.brand_id)
     const [type, setType] = useState('')
@@ -40,30 +41,59 @@ const TableBodyPcRow = ({car,data,key,load,setLoad}) => {
 
 
 
-    },[])
+    },[stateYear])
 
 
     return (
+        <>
+            {
+                stateYear === CURRENT_YEAR_MONTH.january
+                    ?
 
-        <div className={s.table_body_wrapper} style={{order:'-'+totalSum,display:totalSum ===0? 'none':'grid'}}>
-            <div data-pc-id={car.id} className={s.body_item + ' pc'}>{type}</div>
-            <div data-pc-id={car.id} className={s.body_item + ' pc-brand'}>{brandName.name}</div>
-            <div data-pc-id={car.id} className={s.body_item + ' pc-model'}>{car.name}</div>
-            <div data-pc-id={car.id} data-mount-id={'1609448400'} className={s.body_item + ' pc'}>0</div>
-            <div data-pc-id={car.id} data-mount-id={'1612126800'} className={s.body_item + ' pc'}>0</div>
-            <div data-pc-id={car.id} data-mount-id={'1614546000'} className={s.body_item + ' pc'}>0</div>
-            <div data-pc-id={car.id} data-mount-id={'1617224400'} className={s.body_item + ' pc'}>0</div>
-            <div data-pc-id={car.id} data-mount-id={'1619816400'} className={s.body_item + ' pc'}>0</div>
-            <div data-pc-id={car.id} data-mount-id={'1622494800'} className={s.body_item + ' pc'}>0</div>
-            <div data-pc-id={car.id} data-mount-id={'1625086800'} className={s.body_item + ' pc'}>0</div>
-            <div data-pc-id={car.id} data-mount-id={'1627765200'} className={s.body_item + ' pc'}>0</div>
-            <div data-pc-id={car.id} data-mount-id={'1630443600'} className={s.body_item + ' pc'}>0</div>
-            <div data-pc-id={car.id} data-mount-id={'1633035600'} className={s.body_item + ' pc'}>0</div>
-            <div data-pc-id={car.id} data-mount-id={'1635714000'} className={s.body_item + ' pc'}>0</div>
-            <div data-pc-id={car.id} data-mount-id={'1638306000'} className={s.body_item + ' pc'}>0</div>
-            <div data-pc-id={car.id} className={s.body_item + ' pc-count-year' }>{totalSum}</div>
+                    <div className={s.table_body_wrapper} style={{order:'-'+totalSum}}>
+                        {/*<div data-pc-id={car.id} className={s.body_item + ' pc'}>{type}</div>*/}
+                        <div data-pc-id={car.id} className={s.body_item + ' pc-brand'+ ' brand_name_block'}>{brandName.name}</div>
+                        <div data-pc-id={car.id} className={s.body_item + ' pc-model'+ ' model_name_block'}>{car.name}</div>
+                        <div data-pc-id={car.id} data-mount-id={CURRENT_YEAR_MONTH.january} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={CURRENT_YEAR_MONTH.february} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={CURRENT_YEAR_MONTH.march} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={CURRENT_YEAR_MONTH.april} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={CURRENT_YEAR_MONTH.may} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={CURRENT_YEAR_MONTH.june} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={CURRENT_YEAR_MONTH.july} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={CURRENT_YEAR_MONTH.august} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={CURRENT_YEAR_MONTH.september} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={CURRENT_YEAR_MONTH.october} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={CURRENT_YEAR_MONTH.november} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={CURRENT_YEAR_MONTH.december} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} className={s.body_item + ' pc-count-year' }>{totalSum}</div>
 
-        </div>
+                    </div>
+                    :
+                    <div className={s.table_body_wrapper} style={{order:'-'+totalSum}}>
+                        {/*<div data-pc-id={car.id} className={s.body_item + ' pc'}>{type}</div>*/}
+                        <div data-pc-id={car.id} className={s.body_item + ' pc-brand'+ ' brand_name_block'}>{brandName.name}</div>
+                        <div data-pc-id={car.id} className={s.body_item + ' pc-model'+ ' model_name_block'}>{car.name}</div>
+                        <div data-pc-id={car.id} data-mount-id={PREVIOUS_YEAR_MONTH.january} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={PREVIOUS_YEAR_MONTH.february} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={PREVIOUS_YEAR_MONTH.march} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={PREVIOUS_YEAR_MONTH.april} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={PREVIOUS_YEAR_MONTH.may} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={PREVIOUS_YEAR_MONTH.june} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={PREVIOUS_YEAR_MONTH.july} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={PREVIOUS_YEAR_MONTH.august} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={PREVIOUS_YEAR_MONTH.september} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={PREVIOUS_YEAR_MONTH.october} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={PREVIOUS_YEAR_MONTH.november} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} data-mount-id={PREVIOUS_YEAR_MONTH.december} className={s.body_item + ' pc'}>0</div>
+                        <div data-pc-id={car.id} className={s.body_item + ' pc-count-year' }>{totalSum}</div>
+
+                    </div>
+            }
+        </>
+
+
+
     );
 };
 

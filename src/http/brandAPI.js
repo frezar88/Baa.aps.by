@@ -1,5 +1,5 @@
 import {$host, $authHost} from "./index";
-
+import {CURRENT_YEAR_MONTH,CURRENT_YEAR_MONTH_2022} from "../utils/consts"
 
 export const bands = async () => {
     const response = await $host.get('/server/brands')
@@ -34,8 +34,12 @@ export const getStatic = async () => {
     const response = await $authHost(`/server/sales-stats`)
     return response
 }
+// export const getStaticForYear = async () => {
+//     const response = await $authHost(`/server/sales-stats?date_from=1577826000&date_to=1631048500`)
+//     return response
+// }
 export const getStaticForYear = async () => {
-    const response = await $authHost(`/server/sales-stats?date_from=1577826000&date_to=1631048500`)
+    const response = await $authHost(`/server/sales-stats?date_from=1577826000&date_to=${CURRENT_YEAR_MONTH.december}`)
     return response
 }
 
@@ -54,16 +58,16 @@ export const getFillingStatistic = async (date) => {
     const response = await $authHost.get(`/server/stat/filling?timestamp=${date}`)
     return response
 }
-export const getAllStatistic = async () => {
-    const response = await $authHost.get(`/server/stat/common?from=1609459200&by_month=1&type=brand`)
+export const getAllStatistic = async (to) => {
+    const response = await $authHost.get(`/server/stat/common?from=${to}&by_month=1&type=brand`)
     return response
 }
-export const getAllStatisticPc = async () => {
-    const response = await $authHost.get(`/server/stat/common?from=1609459200&by_month=1&type=brand&car_type_id=1`)
+export const getAllStatisticPc = async (from) => {
+    const response = await $authHost.get(`/server/stat/common?from=${from}&by_month=1&type=brand&car_type_id=1`)
     return response
 }
-export const getAllStatisticLcv = async () => {
-    const response = await $authHost.get(`/server/stat/common?from=1609459200&by_month=1&type=brand&car_type_id=2`)
+export const getAllStatisticLcv = async (from) => {
+    const response = await $authHost.get(`/server/stat/common?from=${from}&by_month=1&type=brand&car_type_id=2`)
     return response
 }
 
@@ -99,8 +103,8 @@ export const getAllStatisticModel = async () => {
     const response = await $authHost.get(`/server/stat/common?type=car`)
     return response
 }
-export const getAllStatisticModelValue = async () => {
-    const response = await $authHost.get(`/server/stat/common?by_month=1&from=1609448400&type=car`)
+export const getAllStatisticModelValue = async (from) => {
+    const response = await $authHost.get(`/server/stat/common?by_month=1&from=${from}&type=car`)
     return response
 }
 export const sendFeedBack = async (text) => {
@@ -113,6 +117,14 @@ export const getStatisticForCompare = async (from, to, brand_id) => {
 }
 export const getStatisticForCompareAndCarType = async (from, to, brand_id,car_type) => {
     const response = await $authHost.get(`/server/stat/common?by_month=1&from=${from}&to=${to}&type=brand&brand_id=${brand_id}&car_type_id=${car_type}`)
+    return response
+}
+export const getStatisticForCompareModel = async (from, to, model_id) => {
+    const response = await $authHost.get(`/server/stat/common?by_month=1&from=${from}&to=${to}&type=model&model_id=${model_id}`)
+    return response
+}
+export const getStatisticForCompareModelCarType = async (from, to, model_id,car_type) => {
+    const response = await $authHost.get(`/server/stat/common?by_month=1&from=${from}&to=${to}&type=model&model_id=${model_id}&car_type_id=${car_type}`)
     return response
 }
 export const getCarSubType = async () => {

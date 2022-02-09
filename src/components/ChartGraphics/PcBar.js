@@ -163,6 +163,10 @@ const PcBar = (props) => {
                             }
 
                         },
+                        datalabels: {
+                            color: 'black',
+                            fontWeight:'bold'
+                        },
                         legend: {
                             display: true,
                             labels: {

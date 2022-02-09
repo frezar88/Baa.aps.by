@@ -1,11 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
 import s from "./TablePc.module.css";
 import {getAllStatisticModel, getAllStatisticModelValue} from "../../../http/brandAPI";
-import {Button, Spinner} from "react-bootstrap";
+import {Button, Form, Spinner} from "react-bootstrap";
 import TableBodyPcRow from "./components/pc/TableBodyPcRow";
 import TableHeadPCRow from "./components/pc/TableHeadPCRow";
 import TableFooterPCRow from "./components/pc/TableFooterPCRow";
 import {Context} from "../../../index";
+import {CURRENT_YEAR_MONTH} from "../../../utils/consts";
 
 
 const TablePc = ({
@@ -22,6 +23,9 @@ const TablePc = ({
     const [load1, setLoad1] = useState(false)
     const [load2, setLoad2] = useState(false)
     const [load, setLoad] = useState(false)
+
+    const [stateYear,setStateYear]=useState(CURRENT_YEAR_MONTH.january)
+    const [loadDateLocal, setLoadDateLocal] = useState(false)
 
 
     useEffect(() => {
@@ -55,7 +59,7 @@ const TablePc = ({
     }, [selectSubType])
 
     useEffect(() => {
-        getAllStatisticModelValue().then(data => {
+        getAllStatisticModelValue(stateYear).then(data => {
             let array = []
             for (let dataKey in data.data.data) {
                 data.data.data[dataKey].forEach(el => {
@@ -70,8 +74,9 @@ const TablePc = ({
             setCarsValue(array)
             setLoad2(true)
             setLoadDataDone(true)
+            setLoadDateLocal(true)
         })
-    }, [])
+    }, [stateYear])
 
     const typef = (car) => {
         console.log(car)
@@ -91,31 +96,40 @@ const TablePc = ({
 
         ]
         carList.forEach(el => {
-            let brandName = brandModel.IsBrand.find((item) => item.id === el.car.model.brand_id)
-            objArray.push([typef(el.car['car_type_id']), brandName.name, el.car.name, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', el.car.id])
+            let brandName = brandModel.IsBrand.find((item) => item.id == el.car.model.brand_id)
             let totalSum = 0
-            carsValue.filter(item => item.car_id === el.car.id).forEach(el2 => {
-                let numberMonth = new Date(+el2.date * 1000).toLocaleDateString('en', {month: 'numeric'})
 
+
+            carsValue.filter(item => item.car_id === el.car.id)
+                .filter(item => item['date'] >= +stateYear && stateYear == CURRENT_YEAR_MONTH.january ? +item['date']: +item['date']<= 1638306000)
+                .forEach(el2 => {
+                let numberMonth = new Date(+el2.date * 1000).toLocaleDateString('en', {month: 'numeric'})
                 totalSum += +el2.value
-                objArray.forEach(el3 => {
-                    if (el3.indexOf(el2.car_id) !== -1 && el3.indexOf(el2.car_id) !== -1) {
-                        el3[+numberMonth + 2] = el2.value
-                        el3[15] = +totalSum
-                    }
-                })
+                el[13] = +totalSum
+            })
+            objArray.push([typef(el.car['car_type_id']), brandName.name, el.car.name, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', totalSum, el.car.id])
+        })
+        carsValue.filter(item => item['date'] >= +stateYear && stateYear == CURRENT_YEAR_MONTH.january ? +item['date']: +item['date']<= 1638306000).filter(item => item.value && item.value !== '0').forEach(el => {
+            let numberMonth = new Date(+el.date * 1000).toLocaleDateString('en', {month: 'numeric'})
+            objArray.forEach(el3 => {
+                if (el3[16] == el.car_id)  {
+                    el3[+numberMonth + 2] = el.value
+                }
             })
         })
+        let tempArr=[]
         objArray.sort(function (a, b) {
             return b[15] - a[15]
         })
-        let sortObjArray2 = []
-        objArray.forEach(el => {
-            sortObjArray2.push(el.slice(0, el.length - 1))
+        objArray.forEach(el=>{
+            tempArr.push(el.slice(0,el.length-1))
         })
 
-
-        let array = typeof sortObjArray2 != 'object' ? JSON.parse(sortObjArray2) : sortObjArray2;
+        let array = typeof tempArr != 'object' ? JSON.parse(tempArr) : tempArr;
+        let x = 0
+        array.forEach(el => {
+            el.unshift(x++)
+        })
         let str = '';
         for (let i = 0; i < array.length; i++) {
             let line = [];
@@ -128,7 +142,7 @@ const TablePc = ({
         const universalBOM = "\uFEFF";
         let a = window.document.createElement('a');
         a.setAttribute('href', 'data:text/csv; charset=utf-8,' + encodeURIComponent(universalBOM + str));
-        a.setAttribute('download', 'ModelPc.csv');
+        a.setAttribute('download', 'ModelPC.csv');
         window.document.body.appendChild(a);
         a.click();
     }
@@ -145,30 +159,79 @@ const TablePc = ({
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
                                 alignItem: 'center',
-                                paddingBottom: '15px'
+                                paddingBottom: '15px',
+                                order: '-3'
                             }}>
-                                <h3 style={{paddingLeft: 0, marginBottom: 0,}}>Статистика PC моделей</h3>
-                                <Button variant={"outline-light"} onClick={download}>Скачать стастистику</Button>
-                            </div>
-                            <TableHeadPCRow/>
-                            <div className={s.table_body + ' pc_body'} style={{display: 'grid'}}>
-                                {
-                                    load1 && load2 && carList ?
-                                        carList.map(({car}) =>
-                                            <TableBodyPcRow
-                                                key={car.id} car={car}
-                                                data={carsValue.filter(item => item['car_id'] === car.id)}
-                                                load={load} setLoad={setLoad}
-                                            />
-                                        )
-                                        : <Spinner animation={'grow'}/>
-                                }
-                            </div>
+                                <div>
+                                    <h3 style={{paddingLeft: 0, marginBottom: 0,}}>Статистика PC моделей</h3>
+                                </div>
+                                <div style={{display: 'flex', alignItems: 'center', gridGap: '20px'}}>
+                                    <Button variant={"outline-light"} onClick={download}>Скачать таблицу</Button>
+                                    <div>
+                                        <Form>
+                                            <Form.Select defaultValue={stateYear} onChange={(e) => {
+                                                setStateYear(e.target.value)
+                                                setLoadDateLocal(false)
+                                            }
+                                            }>
+                                                <option value={CURRENT_YEAR_MONTH.january}>2022</option>
+                                                <option value={'1609448400'}>2021</option>
+                                            </Form.Select>
+                                        </Form>
+                                    </div>
+                                </div>
 
-                            <div className={s.table_footer}>
-                                <TableFooterPCRow loadInputSelectSubType={loadInputSelectSubType} load={load}/>
-                            </div>
 
+                            </div>
+                            {
+                                loadDateLocal
+                                ?
+                                    <>
+                                        <div style={{order: '-2'}}>
+                                            <TableHeadPCRow stateYear={stateYear}/>
+                                        </div>
+                                        <div style={{display: 'grid', gridTemplateColumns: '30px 1fr',}}>
+                                            <div>
+                                                {
+                                                    load1 && load2 && carList[0] ?
+                                                        // carList.filter(item => item.value !== '0').map((currElement, index) =>
+                                                        carList.map((currElement, index) =>
+                                                            <div style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                fontSize: '16px',
+                                                                borderBottom: '1px solid rgb(102, 102, 102)',
+                                                                padding: '10px 0'
+                                                            }}>{index + 1}</div>
+                                                        )
+                                                        : false
+
+                                                }
+                                            </div>
+                                            <div className={s.table_body + ' pc_body'} style={{display: 'grid'}}>
+                                                {
+                                                    load1 && load2 && carList ?
+                                                        carList.map(({car}) =>
+                                                            <TableBodyPcRow
+                                                                key={car.id} car={car}
+                                                                data={carsValue.filter(item => item['car_id'] === car.id).filter(item=>stateYear == CURRENT_YEAR_MONTH.january? item: +item.date < 1640984400 )}
+                                                                load={load} setLoad={setLoad}
+                                                                stateYear={stateYear}
+                                                            />
+                                                        )
+                                                        : <Spinner animation={'grow'}/>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <div className={s.table_footer}>
+                                            <TableFooterPCRow stateYear={stateYear} loadInputSelectSubType={loadInputSelectSubType} load={load}/>
+                                        </div>
+
+                                    </>
+                                    :
+                                    <Spinner animation={"grow"}/>
+                            }
 
                         </div>
                     </div>

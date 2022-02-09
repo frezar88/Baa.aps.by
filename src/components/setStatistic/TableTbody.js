@@ -1,30 +1,57 @@
-import React, { useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import StatisticalTableRow from "./StatisticalTableRow";
 import s from './TableTbody.module.css'
 
 
-
 const TableTbody = (props) => {
-
+    const [x, setX] = useState()
     const presentDate = new Date().toLocaleString('en', {year: "numeric", month: 'long'})
     const [load, setLoad] = useState(false)
 
+
     useEffect(() => {
 
-        let currentYear = props.allModelSalesValue.filter(item => item.timestamp.slice(0, 4) === '2021')
+        let selectedYear = String(new Date(+props.stateSelectYear * 1000).getFullYear())
+        setX(selectedYear)
+        let currentYear = props.allModelSalesValue.filter(item => item.timestamp.slice(0, 4) === selectedYear)
+
         let lastMouth = (getLastMothData(currentYear))
+
+        // if  (+lastMouth+1 === 13){
+        //     lastMouth = 11
+        // }
         let toDay = new Date().toLocaleString('en', {month: "numeric"})
-        console.log(toDay, lastMouth)
+
 
         let currentMonthInput = document.querySelectorAll('td input')
         currentMonthInput.forEach(el => {
-            if (+el.attributes['data-mouth-number'].value === +lastMouth+1 && +el.attributes['data-mouth-number'].value < toDay) {
 
-                el.removeAttribute('disabled')
-                el.setAttribute('placeholder', '')
-                el.parentNode.className= s.active + ' active'
-                console.log(el.parentNode)
-            }
+            setTimeout(() => {
+                if (!lastMouth) {
+                    if (+el.attributes['data-mouth-number'].value === 1) {
+                        el.removeAttribute('disabled')
+                        el.setAttribute('placeholder', '')
+                        el.parentNode.className = s.active + ' active'
+                    } else {
+                        el.setAttribute('disabled', 'true')
+                        el.setAttribute('placeholder', '-')
+                        el.parentNode.className = ''
+                    }
+                } else {
+                    if (+el.attributes['data-mouth-number'].value === +lastMouth + 1 && +el.attributes['data-mouth-number'].value < toDay ) {
+                        el.removeAttribute('disabled')
+                        el.setAttribute('placeholder', '')
+                        el.parentNode.className = s.active + ' active'
+
+                    } else {
+                        el.setAttribute('disabled', 'true')
+                        el.setAttribute('placeholder', '-')
+                        el.parentNode.className = ''
+                    }
+                }
+
+            }, 1000)
+
             // if (el.parentNode.className) {
             //     el.removeAttribute('disabled')
             //     el.setAttribute('placeholder', '')
@@ -37,8 +64,11 @@ const TableTbody = (props) => {
     }, [props.stateSelectYear, props.allModel, props.loadFilled])
 
     const getLastMothData = (data) => {
+
+
         let arr = []
-        data.forEach(({timestamp}) => {
+        data.filter(item => +item.cars['models']['brand_id'] === +props.brand_id).forEach(({timestamp}) => {
+
 
             if (arr.indexOf(timestamp.slice(5, 7)) === -1) {
                 arr.push(timestamp.slice(5, 7))
@@ -60,7 +90,7 @@ const TableTbody = (props) => {
                         car_id={id}
                         all_model_data={model}
                         brand_id={props.brand_id}
-                        sales_data={props.allModelSalesValue.filter(item => item.car_id === id && item.timestamp.slice(0, 4) === '2021')}
+                        sales_data={props.allModelSalesValue.filter(item => item.car_id === id && item.timestamp.slice(0, 4) === x)}
                         stateSelectYear={props.stateSelectYear}
                         setload={setLoad}
                         load={load}

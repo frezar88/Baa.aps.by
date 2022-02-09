@@ -1,6 +1,6 @@
 .table {
     margin-top: 10px;
-
+    display: grid;
 }
 
 .table_head {
@@ -65,7 +65,7 @@
 }
 
 .table_footer {
-
+    order: -1;
 }
 
 .table_footer_wrapper {

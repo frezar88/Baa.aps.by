@@ -66,32 +66,33 @@ const SelectBrandAndYear = (props) => {
                 </Form.Label>
             </div>
             <div>
-                {/*<Form.Label style={{*/}
-                {/*    fontWeight: 600,*/}
-                {/*    fontSize: 16,*/}
-                {/*    display: "flex",*/}
-                {/*    alignItems: 'center',*/}
-                {/*    color:'#fff'*/}
+                <Form.Label style={{
+                    fontWeight: 600,
+                    fontSize: 16,
+                    display: "flex",
+                    alignItems: 'center',
+                    color:'#fff'
 
-                {/*}}>*/}
-                {/*    год*/}
-                {/*    <Form.Select*/}
-                {/*        style={{*/}
-                {/*            boxSizing: "border-box",*/}
-                {/*            maxWidth: 200,*/}
-                {/*            padding: '.05rem .25rem .10rem .75rem',*/}
-                {/*            marginLeft: '12px'*/}
-                {/*        }}*/}
-                {/*        className={'select_mouth'}*/}
-                {/*        defaultValue={'1609448400'}*/}
-                {/*        onChange={(e) => props.stateYear(e.target['value'])}*/}
+                }}>
+                    год
+                    <Form.Select
+                        style={{
+                            boxSizing: "border-box",
+                            maxWidth: 200,
+                            padding: '.05rem .25rem .10rem .75rem',
+                            marginLeft: '12px'
+                        }}
+                        className={'select_mouth'}
+                        defaultValue={'1640984400'}
+                        onChange={(e) => props.stateYear(e.target['value'])}
 
-                {/*    >*/}
-                {/*        <option value="1609448400">2021</option>*/}
-                {/*        <option value="1640984400">2020</option>*/}
+                    >
+                        <option value="1640984400">2022</option>
+                        <option value="1609448400">2021</option>
 
-                {/*    </Form.Select>*/}
-                {/*</Form.Label>*/}
+
+                    </Form.Select>
+                </Form.Label>
             </div>
 
         </div>

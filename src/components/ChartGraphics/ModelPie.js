@@ -47,7 +47,6 @@ const ModelPie = (props) => {
 
             ],
             borderColor: [
-
                 'red',
                 'red',
                 'red',
@@ -106,6 +105,7 @@ const ModelPie = (props) => {
                 }).finally(() => {
                     setLabels(labels)
                     setCount(count)
+                    props.setLoadModel(false)
                 })
             }catch (e) {
 
@@ -153,6 +153,10 @@ const ModelPie = (props) => {
 
                             }
 
+                        },
+                        datalabels: {
+                            color: 'black',
+                            fontWeight:'bold'
                         },
                         legend: {
                             display: true,

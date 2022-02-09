@@ -37,7 +37,8 @@ const EditProfile = () => {
                 user.setUser(data)
             })
         } catch (e) {
-         setErrorText('Ошибка отправки данных (обратитесь в службу поддержки)')
+
+         setErrorText(e.response.data)
         }
     }
     console.log(user.User)

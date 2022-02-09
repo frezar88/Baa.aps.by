@@ -1,14 +1,16 @@
 .table{
     margin-top: 20px;
-
+    display: grid;
 }
 .table_head{
     padding: 10px 0;
     display: grid;
-    grid-template-columns: 150px repeat(12 , 1fr) 70px;
+    grid-template-columns: 30px 150px repeat(12 , 1fr) 70px;
+
 }
 .table_head{
     position: relative;
+
 }
 /*.table_head:before{*/
 /*    position: absolute;*/
@@ -43,10 +45,13 @@
 .table_body{
 
 }
-.table_body_wrapper,
-.table_footer_wrapper{
+.table_body_wrapper{
     display: grid;
     grid-template-columns: 150px repeat(12 , 1fr) 70px;
+}
+.table_footer_wrapper{
+    display: grid;
+    grid-template-columns: 30px 150px repeat(12 , 1fr) 70px;
 }
 .table_body_wrapper{
     background: #fff;
@@ -84,7 +89,7 @@
 }
 
 .table_footer{
-
+    order: -2;
 }
 .table_footer_wrapper{
 

@@ -1,11 +1,12 @@
 .table{
     margin-top: 10px;
+    display: grid;
 
 }
 .table_head{
     padding: 10px 0;
     display: grid;
-    grid-template-columns: 260px 150px repeat(12 , 1fr) 70px;
+    grid-template-columns: 30px 260px 130px repeat(12 , 1fr) 70px;
 }
 .head_item,
 .footer_item{
@@ -25,7 +26,7 @@
 .table_body_wrapper,
 .table_footer_wrapper{
     display: grid;
-    grid-template-columns: 260px 150px  repeat(12 , 1fr) 70px;
+    grid-template-columns: 260px 130px  repeat(12 , 1fr) 70px;
     align-items: center;
 }
 .table_body_wrapper{
@@ -60,7 +61,7 @@
 }
 
 .table_footer{
-
+    order: -1;
 }
 .table_footer_wrapper{
 

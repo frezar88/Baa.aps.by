@@ -106,7 +106,7 @@ const Table = (props) => {
                             false
                     }
                     {
-                        presentDate === selectedYear && !filled[0] && loadFilled ?
+                        presentDate  && !filled[0] && loadFilled ?
                             <BtnSaveStatistic callback={sendFormData}/>
                             :
                             false

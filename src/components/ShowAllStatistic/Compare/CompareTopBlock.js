@@ -1,15 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import CompareTopBlockBrandsList from "./components/CompareTopBlockBrandsList";
 import CompareTopBlockTypeBlock from "./components/CompareTopBlockTypeBlock";
-import {getStatisticForCompare, getStatisticForCompareAndCarType} from "../../../http/brandAPI";
+import {
+    getStatisticForCompare,
+    getStatisticForCompareAndCarType,
+    getStatisticForCompareModel
+} from "../../../http/brandAPI";
+import {CURRENT_YEAR_MONTH} from "../../../utils/consts";
 
 
 const CompareTopBlock = (props) => {
     const [selectedBrands, setSelectedBrands] = useState([])
     const [valueType, setValueType] = useState('')
     const [stateInputOldYear, setStateInputOldYear] = useState(false)
-    const [currentYear, setCurrentYear] = useState('1577826000,1609448400,2020')
-    const[blockedButton,setBlockedButton]=useState(false)
+    const [currentYear, setCurrentYear] = useState('1609448400,1640984400,2021')
+    const [blockedButton, setBlockedButton] = useState(false)
 
     const btnSend = async () => {
         setBlockedButton(true)
@@ -24,18 +29,42 @@ const CompareTopBlock = (props) => {
                 if (!valueType) {
                     let from = currentYear.split(',')[0].trim()
                     let to = currentYear.split(',')[1].trim()
+                    if (!el.model_id){
+                        getStatisticForCompare(CURRENT_YEAR_MONTH.january, '1672520400', el.brand_id).then(data => {
+                            createData(dataForGraph, arrDataValues, el, data.data.data, responseLength, lengthBrands, false)
+                        })
+                    }else{
+                        getStatisticForCompareModel(CURRENT_YEAR_MONTH.january, '1672520400', el.model_id).then(data => {
 
-                    getStatisticForCompare('1609448400', '1640984400', el.brand_id).then(data => {
+                            let dataModels = data.data.data
 
-                        createData(dataForGraph, arrDataValues, el, data.data.data, responseLength, lengthBrands, false)
+                            for (const dataKey in dataModels) {
+                                dataModels[dataKey]= dataModels[dataKey].filter(item=>item.model_id === el.model_id)
+                            }
 
-                    })
+                            createData(dataForGraph, arrDataValues, el, data.data.data, responseLength, lengthBrands, false)
+                        })
+                    }
+
                     if (stateInputOldYear) {
                         let currentYearSelect = currentYear.split(',')[2].trim()
-                        getStatisticForCompare(from, to, el.brand_id).then(data => {
+                        if (!el.model_id){
+                            getStatisticForCompare(from, to, el.brand_id).then(data => {
+                                createData(oldDataForGraph, oldArrDataValues, el, data.data.data, responseOldLength, lengthBrands, currentYearSelect)
+                            })
+                        }else{
+                            getStatisticForCompareModel(from, to, el.model_id).then(data => {
 
-                            createData(oldDataForGraph, oldArrDataValues, el, data.data.data, responseOldLength, lengthBrands, currentYearSelect)
-                        })
+                                let dataModels = data.data.data
+
+                                for (const dataKey in dataModels) {
+                                    dataModels[dataKey]= dataModels[dataKey].filter(item=>item.model_id === el.model_id)
+                                }
+
+                                createData(dataForGraph, arrDataValues, el, data.data.data, responseLength, lengthBrands, false)
+                            })
+                        }
+
                     } else {
                         props.setOldDataSet('')
                     }
@@ -43,7 +72,7 @@ const CompareTopBlock = (props) => {
                     let from = currentYear.split(',')[0].trim()
                     let to = currentYear.split(',')[1].trim()
 
-                    getStatisticForCompareAndCarType('1609448400', '1640984400', el.brand_id, valueType).then(data => {
+                    getStatisticForCompareAndCarType(CURRENT_YEAR_MONTH.january, '1672520400', el.brand_id, valueType).then(data => {
 
                         createData(dataForGraph, arrDataValues, el, data.data.data, responseLength, lengthBrands, false)
                     })
@@ -62,14 +91,17 @@ const CompareTopBlock = (props) => {
         )
     }
     const createData = (arr, values, el, data, respLen, brandLen, year) => {
-
-
         for (const key in data) {
-            values.push(+data[key][0].value)
+            console.log(data[key])
+            if (data[key][0]){
+                values.push(+data[key][0].value)
+            }else{
+                values.push(0)
+            }
         }
         arr.push(
             {
-                label: year ? el.brand_name + ' ' + year : el.brand_name,
+                label:  year ? el.model_name ? el.model_name : el.brand_name + ' ' + year : el.model_name ? el.model_name : el.brand_name,
                 backgroundColor: year ? el.color.slice(0, -2) + '20' : el.color.slice(0, -2),
                 borderColor: year ? el.color.slice(0, -2) + '20' : el.color.slice(0, -2),
                 fill: false,
@@ -99,6 +131,7 @@ const CompareTopBlock = (props) => {
                 setSelectedBrands={setSelectedBrands}
             />
             <CompareTopBlockTypeBlock
+                showNumbers={props.showNumbers}
                 blockedButton={blockedButton}
                 setCurrentYear={setCurrentYear}
                 stateInputOldYear={stateInputOldYear}

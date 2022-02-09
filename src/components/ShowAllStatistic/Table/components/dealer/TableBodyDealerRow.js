@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import s from "../../TableDealer.module.css";
+import {CURRENT_YEAR_MONTH, PREVIOUS_YEAR_MONTH} from "../../../../../utils/consts";
 
 
 const TableBodyDealerRow = (props) => {
@@ -20,29 +21,54 @@ const TableBodyDealerRow = (props) => {
                 }
         })
         setTotalSum(sum)
-    },[])
+    },[props.stateYear])
 
 
     return (
-        <div className={s.table_body_wrapper} style={{order:'-'+totalSum}}>
-            <div data-dealer-id={props.dealer.id} className={s.body_item + ' dealer-name'}>{props.dealer.name}</div>
-            <div data-dealer-id={props.dealer.id}  className={s.body_item + ' dealer-brand'}>{props.brand.name}</div>
-            {/*<div data-model-id={props.car.id} className={s.body_item + ' dealer'}>{props.car.name}</div>*/}
-            <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={'1609448400'} className={s.body_item + ' dealer'}>0</div>
-            <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={'1612126800'} className={s.body_item + ' dealer'}>0</div>
-            <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={'1614546000'} className={s.body_item + ' dealer'}>0</div>
-            <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={'1617224400'} className={s.body_item + ' dealer'}>0</div>
-            <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={'1619816400'} className={s.body_item + ' dealer'}>0</div>
-            <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={'1622494800'} className={s.body_item + ' dealer'}>0</div>
-            <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={'1625086800'} className={s.body_item + ' dealer'}>0</div>
-            <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={'1627765200'} className={s.body_item + ' dealer'}>0</div>
-            <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={'1630443600'} className={s.body_item + ' dealer'}>0</div>
-            <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={'1633035600'} className={s.body_item + ' dealer'}>0</div>
-            <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={'1635714000'} className={s.body_item + ' dealer'}>0</div>
-            <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={'1638306000'} className={s.body_item + ' dealer'}>0</div>
-            <div data-dealer-id={props.dealer.id} className={s.body_item +' brand-count-year' }>{totalSum}</div>
+        <>
+            {
+                props.stateYear == CURRENT_YEAR_MONTH.january
+                ?
+                    <div className={s.table_body_wrapper} style={{order:'-'+totalSum}}>
+                        <div data-dealer-id={props.dealer.id} className={s.body_item + ' dealer-name'+ ' dealer_name_block'}>{props.dealer.name}</div>
+                        <div data-dealer-id={props.dealer.id}  className={s.body_item + ' dealer-brand'+ ' model_name_block'}>{props.brand.name}</div>
+                        {/*<div data-model-id={props.car.id} className={s.body_item + ' dealer'}>{props.car.name}</div>*/}
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={CURRENT_YEAR_MONTH.january} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={CURRENT_YEAR_MONTH.february} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={CURRENT_YEAR_MONTH.march} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={CURRENT_YEAR_MONTH.april} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={CURRENT_YEAR_MONTH.may} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={CURRENT_YEAR_MONTH.june} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={CURRENT_YEAR_MONTH.july} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={CURRENT_YEAR_MONTH.august} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={CURRENT_YEAR_MONTH.september} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={CURRENT_YEAR_MONTH.october} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={CURRENT_YEAR_MONTH.november} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={CURRENT_YEAR_MONTH.december} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} className={s.body_item +' brand-count-year' }>{totalSum}</div>
+                    </div>
+                    :
+                    <div className={s.table_body_wrapper} style={{order:'-'+totalSum}}>
+                        <div data-dealer-id={props.dealer.id} className={s.body_item + ' dealer-name'+ ' dealer_name_block'}>{props.dealer.name}</div>
+                        <div data-dealer-id={props.dealer.id}  className={s.body_item + ' dealer-brand'+ ' model_name_block'}>{props.brand.name}</div>
+                        {/*<div data-model-id={props.car.id} className={s.body_item + ' dealer'}>{props.car.name}</div>*/}
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={PREVIOUS_YEAR_MONTH.january} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={PREVIOUS_YEAR_MONTH.february} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={PREVIOUS_YEAR_MONTH.march} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={PREVIOUS_YEAR_MONTH.april} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={PREVIOUS_YEAR_MONTH.may} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={PREVIOUS_YEAR_MONTH.june} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={PREVIOUS_YEAR_MONTH.july} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={PREVIOUS_YEAR_MONTH.august} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={PREVIOUS_YEAR_MONTH.september} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={PREVIOUS_YEAR_MONTH.october} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={PREVIOUS_YEAR_MONTH.november} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} data-brand-dealer-id={props.brand.id} data-mount-id={PREVIOUS_YEAR_MONTH.december} className={s.body_item + ' dealer'}>0</div>
+                        <div data-dealer-id={props.dealer.id} className={s.body_item +' brand-count-year' }>{totalSum}</div>
+                    </div>
+            }
+        </>
 
-        </div>
     );
 };
 

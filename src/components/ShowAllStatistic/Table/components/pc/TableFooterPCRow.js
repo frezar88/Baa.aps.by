@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import s from "../../TableModel.module.css";
+import {CURRENT_YEAR_MONTH, PREVIOUS_YEAR_MONTH} from "../../../../../utils/consts";
 
 const TableFooterPCRow = (props) => {
 
@@ -31,18 +32,18 @@ const TableFooterPCRow = (props) => {
                 return state(totalSum)
             }
 
-            setSum('.pc_body div[data-mount-id="1609448400"]', setStateJanuary)
-            setSum('.pc_body div[data-mount-id="1612126800"]', setStateFebruary)
-            setSum('.pc_body div[data-mount-id="1614546000"]', setStateMarch)
-            setSum('.pc_body div[data-mount-id="1617224400"]', setStateApril)
-            setSum('.pc_body div[data-mount-id="1619816400"]', setStateMay)
-            setSum('.pc_body div[data-mount-id="1622494800"]', setStateJune)
-            setSum('.pc_body div[data-mount-id="1625086800"]', setStateJuly)
-            setSum('.pc_body div[data-mount-id="1627765200"]', setStateAugust)
-            setSum('.pc_body div[data-mount-id="1630443600"]', setStateSeptember)
-            setSum('.pc_body div[data-mount-id="1633035600"]', setStateOctober)
-            setSum('.pc_body div[data-mount-id="1635714000"]', setStateNovember)
-            setSum('.pc_body div[data-mount-id="1638306000"]', setStateDecember)
+            setSum(`.pc_body div[data-mount-id="${props.stateYear == CURRENT_YEAR_MONTH.january ? CURRENT_YEAR_MONTH.january  : PREVIOUS_YEAR_MONTH.january}"]`, setStateJanuary)
+            setSum(`.pc_body div[data-mount-id="${props.stateYear == CURRENT_YEAR_MONTH.january ? CURRENT_YEAR_MONTH.february : PREVIOUS_YEAR_MONTH.february}"]`, setStateFebruary)
+            setSum(`.pc_body div[data-mount-id="${props.stateYear == CURRENT_YEAR_MONTH.january ? CURRENT_YEAR_MONTH.march : PREVIOUS_YEAR_MONTH.march}"]`, setStateMarch)
+            setSum(`.pc_body div[data-mount-id="${props.stateYear == CURRENT_YEAR_MONTH.january ? CURRENT_YEAR_MONTH.april : PREVIOUS_YEAR_MONTH.april}"]`, setStateApril)
+            setSum(`.pc_body div[data-mount-id="${props.stateYear == CURRENT_YEAR_MONTH.january ? CURRENT_YEAR_MONTH.may : PREVIOUS_YEAR_MONTH.may}"]`, setStateMay)
+            setSum(`.pc_body div[data-mount-id="${props.stateYear == CURRENT_YEAR_MONTH.january ? CURRENT_YEAR_MONTH.june : PREVIOUS_YEAR_MONTH.june}"]`, setStateJune)
+            setSum(`.pc_body div[data-mount-id="${props.stateYear == CURRENT_YEAR_MONTH.january ? CURRENT_YEAR_MONTH.july : PREVIOUS_YEAR_MONTH.july}"]`, setStateJuly)
+            setSum(`.pc_body div[data-mount-id="${props.stateYear == CURRENT_YEAR_MONTH.january ? CURRENT_YEAR_MONTH.august : PREVIOUS_YEAR_MONTH.august}"]`, setStateAugust)
+            setSum(`.pc_body div[data-mount-id="${props.stateYear == CURRENT_YEAR_MONTH.january ? CURRENT_YEAR_MONTH.september : PREVIOUS_YEAR_MONTH.september}"]`, setStateSeptember)
+            setSum(`.pc_body div[data-mount-id="${props.stateYear == CURRENT_YEAR_MONTH.january ? CURRENT_YEAR_MONTH.october : PREVIOUS_YEAR_MONTH.october}"]`, setStateOctober)
+            setSum(`.pc_body div[data-mount-id="${props.stateYear == CURRENT_YEAR_MONTH.january ? CURRENT_YEAR_MONTH.november : PREVIOUS_YEAR_MONTH.november}"]`, setStateNovember)
+            setSum(`.pc_body div[data-mount-id="${props.stateYear == CURRENT_YEAR_MONTH.january ? CURRENT_YEAR_MONTH.december : PREVIOUS_YEAR_MONTH.december}"]`, setStateDecember)
             setSum('.pc_body div.pc-count-year', setStateTotal)
         }
 
@@ -51,7 +52,8 @@ const TableFooterPCRow = (props) => {
 
     return (
         <div className={s.table_footer_wrapper}>
-            <div className={s.footer_item}></div>
+            <div></div>
+            {/*<div className={s.footer_item}></div>*/}
             <div className={s.footer_item}></div>
             <div className={s.footer_item}></div>
             <div className={s.footer_item}>{stateJanuary}</div>
@@ -66,9 +68,7 @@ const TableFooterPCRow = (props) => {
             <div className={s.footer_item}>{stateOctober}</div>
             <div className={s.footer_item}>{stateNovember}</div>
             <div className={s.footer_item}>{stateDecember}</div>
-            <div className={s.footer_item}>{stateTotal ? stateTotal :
-                stateJanuary + stateFebruary + stateMarch + stateApril + stateMay + stateJune + stateJuly + stateAugust + stateSeptember + stateOctober + stateNovember + stateDecember
-            }</div>
+            <div className={s.footer_item}>{stateJanuary+stateFebruary+stateMarch+stateApril+stateMay+stateJune+stateJuly+stateAugust+stateSeptember+stateOctober+stateNovember+stateDecember}</div>
         </div>
     );
 };

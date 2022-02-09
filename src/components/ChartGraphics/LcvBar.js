@@ -90,7 +90,7 @@ const LcvBar = (props) => {
                     })
 
                     setTotalSum(temporary)
-                    console.log(result)
+
 
                     result.filter((item)=>+item.car['car_type_id'] === 2).sort(function (a, b) {
                         return b.value - a.value
@@ -102,20 +102,7 @@ const LcvBar = (props) => {
                             count.push(el.value)
                         }
                     })
-                    // result.filter(item => item.car['car_type_id'].name === '2').sort(function (a, b) {
-                    //     return b.value - a.value
-                    // }).forEach(el => {
-                    //     if (labels.length < 20) {
-                    //         let sub = ''
-                    //         if (el.car['car_subtype_id']) {
-                    //             sub = el.car['car_subtype_id']
-                    //         }
-                    //         labels.push(el.car.model.brand.name + ' ' + el.car.name + ' ' + sub)
-                    //
-                    //
-                    //         count.push(el.value)
-                    //     }
-                    // })
+
 
                 }).finally(() => {
                     setLabels(labels)
@@ -168,6 +155,10 @@ const LcvBar = (props) => {
 
                             }
 
+                        },
+                        datalabels: {
+                            color: 'black',
+                            fontWeight:'bold'
                         },
                         legend: {
                             display: true,

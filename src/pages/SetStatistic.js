@@ -10,7 +10,7 @@ import Table from "../components/setStatistic/Table";
 import {getCars, getStatic} from "../http/brandAPI";
 const SetStatistic = () => {
     const {user} = useContext(Context)
-    const [stateSelectYear, setSelectStateYear] = useState('1609448400')
+    const [stateSelectYear, setSelectStateYear] = useState('1640984400')
     const [stateSelectBrand, setSelectStateBrand] = useState()
     const [loadSelect, setLoadSelect] = useState(false)
     const [allModel, setAllModel] = useState()
@@ -29,7 +29,7 @@ const SetStatistic = () => {
 
                 let cars = data.data.included.cars.map((c)=>({...c,models: data.data.included.models.find((m) => m.id === c.model_id)}))
                 let result = data.data.data.map((el)=>({...el,cars:cars.find((c) => el.car_id === c.id)}))
-                console.log(result)
+
                 setAllModelSalesValue(result)
             })
 

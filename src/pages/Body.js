@@ -3,7 +3,7 @@ import { Container} from "react-bootstrap";
 import img from '../Screenshot_2.png'
 import s from './Body.module.css'
 import {useHistory} from "react-router-dom";
-import {LOGIN_ROUTE, REGISTRATION_ROUTE, STATISTIC_MENU} from "../utils/consts";
+import {LOGIN_ROUTE,  STATISTIC_MENU} from "../utils/consts";
 import {Context} from "../index";
 
 
@@ -36,10 +36,10 @@ const Body = () => {
                          style={{background: '#fff', borderRadius: 5}}>
                         <p style={{fontSize:20,fontWeight:500 ,minWidth:190,textAlign:'center'}} className="m-0">Вход в аккаунт</p>
                     </div>
-                    <div onClick={()=>{history.push(REGISTRATION_ROUTE) }} className={s.block +" p-5 d-flex justify-content-center align-items-center  ms-4"}
-                         style={{background: '#fff', borderRadius: 5}}>
-                        <p style={{fontSize:20,fontWeight:500,minWidth:190,textAlign:'center'}} className="m-0">Регистрация</p>
-                    </div>
+                    {/*<div onClick={()=>{history.push(REGISTRATION_ROUTE) }} className={s.block +" p-5 d-flex justify-content-center align-items-center  ms-4"}*/}
+                    {/*     style={{background: '#fff', borderRadius: 5}}>*/}
+                    {/*    <p style={{fontSize:20,fontWeight:500,minWidth:190,textAlign:'center'}} className="m-0">Регистрация</p>*/}
+                    {/*</div>*/}
 
                 </Container>
             </div>

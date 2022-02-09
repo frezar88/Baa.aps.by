@@ -104,7 +104,7 @@ export const publicRoutes =[
     },
     {
         path:BODY_ROUTE,
-        component: Body
+        component: Auth
     },
     {
         path:SUCCESS,

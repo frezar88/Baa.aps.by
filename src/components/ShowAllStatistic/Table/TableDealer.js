@@ -4,21 +4,30 @@ import {
     getAllStatisticDealers,
     getAllStatisticDealersValue,
 } from "../../../http/brandAPI";
-import {Button, Spinner} from "react-bootstrap";
+import {Button, Form, Spinner} from "react-bootstrap";
 import TableHeadDealerRow from "./components/dealer/TableHeadDealerRow";
 import TableBodyDealerRow from "./components/dealer/TableBodyDealerRow";
+import {CURRENT_YEAR_MONTH} from "../../../utils/consts";
 
 
 const TableDealer = ({setLoadDataDone}) => {
     const [dealerList, setDealerList] = useState([])
     const [carsValue, setCarsValue] = useState([])
+    const [stateYear, setStateYear] = useState(CURRENT_YEAR_MONTH.january)
+    const [loadDateLocal, setLoadDateLocal] = useState(false)
 
     useEffect(() => {
         getAllStatisticDealers().then(data => {
-            let addBrand =data.data.data.map((el)=>({...el,brand: data.data.included.brands.find((b)=>el.brand_id === b.id)}))
-            let result = addBrand.map((el)=>({...el,dealer: data.data.included.dealers.find((d)=>el.dealer_id === d.id)}))
+            let addBrand = data.data.data.map((el) => ({
+                ...el,
+                brand: data.data.included.brands.find((b) => el.brand_id === b.id)
+            }))
+            let result = addBrand.map((el) => ({
+                ...el,
+                dealer: data.data.included.dealers.find((d) => el.dealer_id === d.id)
+            }))
 
-                setDealerList(result)
+            setDealerList(result)
 
         })
     }, [])
@@ -37,8 +46,9 @@ const TableDealer = ({setLoadDataDone}) => {
             }
             setCarsValue(array)
             setLoadDataDone(true)
+            setLoadDateLocal(true)
         })
-    }, [])
+    }, [stateYear])
 
     const download = () => {
 
@@ -46,23 +56,24 @@ const TableDealer = ({setLoadDataDone}) => {
             ['Дилер', 'Бренд', 'янв.', 'фев.', 'март', 'апр.', 'май', 'июнь', 'июль', 'авг.', 'сен.', 'окт.', 'ноя.', 'дек.', 'ИТОГО', ' ', ' '],
 
         ]
+
         dealerList.forEach(el => {
             objArray.push([el.dealer.name, el.brand.name, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', el.brand.id, el.dealer.id])
             let totalSum = 0
-            carsValue.filter(item => item.brand_id === el.brand.id && item.dealer_id === el.dealer.id).forEach(el2 => {
-
-                let numberMonth = new Date(+el2.date * 1000).toLocaleDateString('en', {month: 'numeric'})
-
-                // console.log(objArray[0][numberMonth+1])
-                totalSum += +el2.value
-                objArray.forEach(el3 => {
-                    if (el3.indexOf(el2.brand_id) !== -1 && el3.indexOf(el2.dealer_id) !== -1) {
-                        el3[+numberMonth + 1] = el2.value
-                        el3[14] = +totalSum
-                    }
+            carsValue.filter(item => item.brand_id === el.brand.id && item.dealer_id === el.dealer.id)
+                .filter(item => item['date'] >= +stateYear && item['date'] < 1672520400).filter(item=>stateYear == CURRENT_YEAR_MONTH.january? item: +item.date < 1640984400 )
+                .forEach(el2 => {
+                    let numberMonth = new Date(+el2.date * 1000).toLocaleDateString('en', {month: 'numeric'})
+                    totalSum += +el2.value
+                    objArray.forEach(el3 => {
+                        if (el3.indexOf(el2.brand_id) !== -1 && el3.indexOf(el2.dealer_id) !== -1) {
+                            el3[+numberMonth + 1] = el2.value
+                            el3[14] = totalSum
+                        }
+                    })
                 })
-            })
         })
+
         objArray.sort(function (a, b) {
             return b[14] - a[14]
         })
@@ -72,6 +83,10 @@ const TableDealer = ({setLoadDataDone}) => {
         })
 
         let array = typeof sortObjArray != 'object' ? JSON.parse(sortObjArray) : sortObjArray;
+        let x = 0
+        array.forEach(el => {
+            el.unshift(x++)
+        })
         let str = '';
         for (let i = 0; i < array.length; i++) {
             let line = [];
@@ -100,28 +115,72 @@ const TableDealer = ({setLoadDataDone}) => {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
-                                alignItem:'center',
-                                paddingBottom:'15px'
+                                alignItem: 'center',
+                                paddingBottom: '15px'
                             }}>
-                                <h3 style={{paddingLeft: 0 ,marginBottom:0,}}>Полная статистика
-                                    дилеров</h3>
-                                <Button variant={"outline-light"} onClick={download}>Скачать стастистику</Button>
+                                <div>
+                                    <h3 style={{paddingLeft: 0, marginBottom: 0,}}>Полная статистика дилеров</h3>
+                                </div>
+                                <div style={{display: 'flex', alignItems: 'center', gridGap: '20px'}}>
+                                    <Button variant={"outline-light"} onClick={download}>Скачать таблицу</Button>
+                                    <div>
+                                        <Form>
+                                            <Form.Select defaultValue={stateYear} onChange={(e) => {
+                                                setStateYear(e.target.value)
+                                                setLoadDateLocal(false)
+                                            }
+                                            }>
+                                                <option value={CURRENT_YEAR_MONTH.january}>2022</option>
+                                                <option value={'1609448400'}>2021</option>
+                                            </Form.Select>
+                                        </Form>
+                                    </div>
+                                </div>
                             </div>
 
-                            <TableHeadDealerRow/>
-                            <div className={s.table_body} style={{display: 'grid'}}>
-                                {
-                                    dealerList ? dealerList.map((({dealer, brand}) =>
-                                            <TableBodyDealerRow key={Math.random()} dealer={dealer} brand={brand}
-                                                                car={'car'}
-                                                                data={carsValue.filter(item => item['dealer_id'] === dealer.id && item['brand_id'] === brand.id)}/>
-                                    )) : <Spinner animation={"grow"}/>
-                                }
+                            {
+                                loadDateLocal
+                                    ?
+                                    <>
+                                        <TableHeadDealerRow stateYear={stateYear} />
+                                        <div style={{display: 'grid', gridTemplateColumns: '30px 1fr',}}>
+                                            <div>
+                                                {
+                                                    dealerList ? dealerList.map((currElement, index) =>
+                                                            <div style={{
+                                                                height: '45px',
+                                                                display: 'flex',
+                                                                alignItems: 'center'
+                                                            }}>
+                                                                <p style={{margin: '0'}}>{index + 1}                                                </p>
+                                                            </div>
+                                                        )
+                                                        : false
+                                                }
+                                            </div>
+                                            <div className={s.table_body} style={{display: 'grid'}}>
+                                                {
+                                                    dealerList ? dealerList.map((({dealer, brand}) =>
+                                                            <TableBodyDealerRow key={Math.random()} dealer={dealer}
+                                                                                brand={brand}
+                                                                                car={'car'}
+                                                                                data={carsValue.filter(item => item['dealer_id'] === dealer.id && item['brand_id'] === brand.id)}
+                                                                                stateYear={stateYear}
+                                                            />
+                                                    )) : <Spinner animation={"grow"}/>
+                                                }
 
-                            </div>
-                            {/*<div className={s.table_footer}>*/}
-                            {/*    <TableFooterModelRow />*/}
-                            {/*</div>*/}
+                                            </div>
+                                            {/*<div className={s.table_footer}>*/}
+                                            {/*    <TableFooterModelRow />*/}
+                                            {/*</div>*/}
+                                        </div>
+                                    </>
+                                    :
+                                    <Spinner animation={"grow"}/>
+                            }
+
+
                         </div>
                     </div>
                     :

@@ -10,7 +10,7 @@ const BrandBar = (props) => {
     const [count, setCount] = useState()
     const [totalSum, setTotalSum] = useState(0)
 
-    const [countLoad, setCountLoad] = useState(false)
+
 
     const data21 = {
         labels: labels,
@@ -55,10 +55,14 @@ const BrandBar = (props) => {
     };
 
     useEffect(() => {
+        props.setLoadBrand(true)
         if (props.from && props.from !== 'Thu Jan 01 1970 03:00:00 GMT+0300 (Moscow Standard Time)') {
             try {
                 getAllStatisticForGraphicsMonth(props.from, props.to).then(data => {
+                    console.log(new Date(props.from *1000))
+                    console.log(new Date(props.to *1000))
 
+                    console.log(data.data.data)
 
                     setTotalSum(0)
                     let temporary = 0
@@ -76,7 +80,7 @@ const BrandBar = (props) => {
                         }
 
                     })
-                    setCountLoad(true)
+
 
                 }).finally(() => {
                     setLabels(labels)
@@ -126,6 +130,10 @@ const BrandBar = (props) => {
                                     return [currentCount, interestCount]
                                 },
                             }
+                        },
+                        datalabels: {
+                            color: 'black',
+                            fontWeight:'bold'
                         },
                         legend: {
                             display: true,
