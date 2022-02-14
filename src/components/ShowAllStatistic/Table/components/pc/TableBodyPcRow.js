@@ -4,7 +4,7 @@ import {Context} from "../../../../../index";
 import {CURRENT_YEAR_MONTH, PREVIOUS_YEAR_MONTH} from "../../../../../utils/consts";
 
 
-const TableBodyPcRow = ({car,data,key,load,setLoad,stateYear}) => {
+const TableBodyPcRow = ({car,data,key,load,setLoad,stateYear,uniqSubType}) => {
     const {brandModel} = useContext(Context)
     let brandName = brandModel.IsBrand.find((item) => item.id === car.model.brand_id)
     const [type, setType] = useState('')
@@ -44,14 +44,18 @@ const TableBodyPcRow = ({car,data,key,load,setLoad,stateYear}) => {
     },[stateYear])
 
 
+
+
+
+
     return (
         <>
             {
                 stateYear === CURRENT_YEAR_MONTH.january
                     ?
 
-                    <div className={s.table_body_wrapper} style={{order:'-'+totalSum}}>
-                        {/*<div data-pc-id={car.id} className={s.body_item + ' pc'}>{type}</div>*/}
+                    <div className={[s.table_body_wrapper,s.table_body_wrapper_pc].join(' ')} style={{order:'-'+totalSum}}>
+                        <div data-pc-id={car.id} className={s.body_item + ' pc'}>{uniqSubType[0]?uniqSubType[0].name:''}</div>
                         <div data-pc-id={car.id} className={s.body_item + ' pc-brand'+ ' brand_name_block'}>{brandName.name}</div>
                         <div data-pc-id={car.id} className={s.body_item + ' pc-model'+ ' model_name_block'}>{car.name}</div>
                         <div data-pc-id={car.id} data-mount-id={CURRENT_YEAR_MONTH.january} className={s.body_item + ' pc'}>0</div>
@@ -70,8 +74,8 @@ const TableBodyPcRow = ({car,data,key,load,setLoad,stateYear}) => {
 
                     </div>
                     :
-                    <div className={s.table_body_wrapper} style={{order:'-'+totalSum}}>
-                        {/*<div data-pc-id={car.id} className={s.body_item + ' pc'}>{type}</div>*/}
+                    <div className={[s.table_body_wrapper,s.table_body_wrapper_pc].join(' ')} style={{order:'-'+totalSum}}>
+                        <div data-pc-id={car.id} className={s.body_item + ' pc'}>{uniqSubType[0]?uniqSubType[0].name:''}</div>
                         <div data-pc-id={car.id} className={s.body_item + ' pc-brand'+ ' brand_name_block'}>{brandName.name}</div>
                         <div data-pc-id={car.id} className={s.body_item + ' pc-model'+ ' model_name_block'}>{car.name}</div>
                         <div data-pc-id={car.id} data-mount-id={PREVIOUS_YEAR_MONTH.january} className={s.body_item + ' pc'}>0</div>

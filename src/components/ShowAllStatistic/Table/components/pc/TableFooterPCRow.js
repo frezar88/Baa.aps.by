@@ -51,9 +51,9 @@ const TableFooterPCRow = (props) => {
 
 
     return (
-        <div className={s.table_footer_wrapper}>
-            <div></div>
-            {/*<div className={s.footer_item}></div>*/}
+        <div className={[s.table_footer_wrapper,s.table_footer_wrapper_pc].join(' ')}>
+            {/*<div></div>*/}
+            <div className={s.footer_item}></div>
             <div className={s.footer_item}></div>
             <div className={s.footer_item}></div>
             <div className={s.footer_item}>{stateJanuary}</div>

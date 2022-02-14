@@ -157,8 +157,8 @@ const TableHeadPCRow = ({stateYear}) => {
             {
                 stateYear == CURRENT_YEAR_MONTH.january
                 ?
-                    <div className={s.table_head}>
-                        <div></div>
+                    <div className={[s.table_head,s.table_head_pc].join(' ')}>
+                        {/*<div></div>*/}
                         {/*<div onClick={(e) => {*/}
                         {/*}} id={s.type_block_model} className={s.head_item}>Тип*/}
                         {/*</div>*/}
@@ -240,12 +240,12 @@ const TableHeadPCRow = ({stateYear}) => {
                         </div>
                     </div>
                     :
-                    <div className={s.table_head}>
+                    <div className={[s.table_head,s.table_head_pc].join(' ')}>
                         <div></div>
                         {/*<div onClick={(e) => {*/}
                         {/*}} id={s.type_block_model} className={s.head_item}>Тип*/}
                         {/*</div>*/}
-                        {/*<div className={s.head_item}>Класс</div>*/}
+                        <div className={s.head_item}>Класс</div>
                         <div onClick={(e) => {
                             sortString('div.pc-brand')
                             highLightSortBlock('', e)

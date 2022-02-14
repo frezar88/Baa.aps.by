@@ -66,7 +66,7 @@ const TableDealer = ({setLoadDataDone}) => {
                     let numberMonth = new Date(+el2.date * 1000).toLocaleDateString('en', {month: 'numeric'})
                     totalSum += +el2.value
                     objArray.forEach(el3 => {
-                        if (el3.indexOf(el2.brand_id) !== -1 && el3.indexOf(el2.dealer_id) !== -1) {
+                        if (el3[15].indexOf(el2.brand_id) !== -1 && el3[16].indexOf(el2.dealer_id) !== -1) {
                             el3[+numberMonth + 1] = el2.value
                             el3[14] = totalSum
                         }
@@ -80,6 +80,7 @@ const TableDealer = ({setLoadDataDone}) => {
         let sortObjArray = []
         objArray.forEach(el => {
             sortObjArray.push(el.slice(0, el.length - 2))
+            // sortObjArray.push(el)
         })
 
         let array = typeof sortObjArray != 'object' ? JSON.parse(sortObjArray) : sortObjArray;

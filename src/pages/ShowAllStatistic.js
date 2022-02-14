@@ -165,6 +165,7 @@ const ShowAllStatistic = () => {
                                                     setLoadDataDone={setLoadDataDone}/> : false}
                                     {navBar.main === 'model' && navBar.second === 'PC' ?
                                         <TablePc
+                                            uniqSubType={uniqSubType}
                                             setLoadInputSelectSubType={setLoadInputSelectSubType}
                                             loadInputSelectSubType={loadInputSelectSubType}
                                             selectSubType={selectSubType}

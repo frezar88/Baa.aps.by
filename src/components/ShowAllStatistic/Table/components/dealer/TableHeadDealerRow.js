@@ -32,7 +32,6 @@ const TableHeadDealerRow = ({stateYear}) => {
 
     function sortDealer(path) {
         let block = document.querySelectorAll(path)
-
         let arr = []
         block.forEach(el => {
             arr.push(el)
@@ -40,13 +39,14 @@ const TableHeadDealerRow = ({stateYear}) => {
         if (!statusSort) {
 
             arr.sort(function (a, b) {
+                let x =a.innerHTML.replaceAll('"', '').slice(0,6).toLocaleLowerCase().localeCompare(b.innerHTML.replaceAll('"', '').slice(0,6).toLocaleLowerCase())
 
-                return a.innerHTML.replaceAll('"', '')[0].localeCompare(b.innerHTML.replaceAll('"', '')[0])
+                return x
             })
             statusSort = 1
         } else {
             arr.sort(function (a, b) {
-                return b.innerHTML.replaceAll('"', '')[0].localeCompare(a.innerHTML.replaceAll('"', '')[0])
+                return b.innerHTML.replaceAll('"', '').slice(0,6).toLocaleLowerCase().localeCompare(a.innerHTML.replaceAll('"', '').slice(0,6).toLocaleLowerCase())
             })
             statusSort = 0
         }

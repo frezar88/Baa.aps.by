@@ -15,7 +15,8 @@ const TablePc = ({
                      allSubTypeCar,
                      selectSubType,
                      loadInputSelectSubType,
-                     setLoadInputSelectSubType
+                     setLoadInputSelectSubType,
+                     uniqSubType
                  }) => {
     const {brandModel} = useContext(Context)
     const [carList, setCarList] = useState([])
@@ -24,7 +25,7 @@ const TablePc = ({
     const [load2, setLoad2] = useState(false)
     const [load, setLoad] = useState(false)
 
-    const [stateYear,setStateYear]=useState(CURRENT_YEAR_MONTH.january)
+    const [stateYear, setStateYear] = useState(CURRENT_YEAR_MONTH.january)
     const [loadDateLocal, setLoadDateLocal] = useState(false)
 
 
@@ -101,28 +102,28 @@ const TablePc = ({
 
 
             carsValue.filter(item => item.car_id === el.car.id)
-                .filter(item => item['date'] >= +stateYear && stateYear == CURRENT_YEAR_MONTH.january ? +item['date']: +item['date']<= 1638306000)
+                .filter(item => item['date'] >= +stateYear && stateYear == CURRENT_YEAR_MONTH.january ? +item['date'] : +item['date'] <= 1638306000)
                 .forEach(el2 => {
-                let numberMonth = new Date(+el2.date * 1000).toLocaleDateString('en', {month: 'numeric'})
-                totalSum += +el2.value
-                el[13] = +totalSum
-            })
+                    let numberMonth = new Date(+el2.date * 1000).toLocaleDateString('en', {month: 'numeric'})
+                    totalSum += +el2.value
+                    el[13] = +totalSum
+                })
             objArray.push([typef(el.car['car_type_id']), brandName.name, el.car.name, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', totalSum, el.car.id])
         })
-        carsValue.filter(item => item['date'] >= +stateYear && stateYear == CURRENT_YEAR_MONTH.january ? +item['date']: +item['date']<= 1638306000).filter(item => item.value && item.value !== '0').forEach(el => {
+        carsValue.filter(item => item['date'] >= +stateYear && stateYear == CURRENT_YEAR_MONTH.january ? +item['date'] : +item['date'] <= 1638306000).filter(item => item.value && item.value !== '0').forEach(el => {
             let numberMonth = new Date(+el.date * 1000).toLocaleDateString('en', {month: 'numeric'})
             objArray.forEach(el3 => {
-                if (el3[16] == el.car_id)  {
+                if (el3[16] == el.car_id) {
                     el3[+numberMonth + 2] = el.value
                 }
             })
         })
-        let tempArr=[]
+        let tempArr = []
         objArray.sort(function (a, b) {
             return b[15] - a[15]
         })
-        objArray.forEach(el=>{
-            tempArr.push(el.slice(0,el.length-1))
+        objArray.forEach(el => {
+            tempArr.push(el.slice(0, el.length - 1))
         })
 
         let array = typeof tempArr != 'object' ? JSON.parse(tempArr) : tempArr;
@@ -146,6 +147,7 @@ const TablePc = ({
         window.document.body.appendChild(a);
         a.click();
     }
+
 
     return (
         <>
@@ -185,7 +187,7 @@ const TablePc = ({
                             </div>
                             {
                                 loadDateLocal
-                                ?
+                                    ?
                                     <>
                                         <div style={{order: '-2'}}>
                                             <TableHeadPCRow stateYear={stateYear}/>
@@ -213,8 +215,10 @@ const TablePc = ({
                                                     load1 && load2 && carList ?
                                                         carList.map(({car}) =>
                                                             <TableBodyPcRow
+                                                                uniqSubType={uniqSubType.filter(item=>item.id == car.car_subtype_id)}
                                                                 key={car.id} car={car}
-                                                                data={carsValue.filter(item => item['car_id'] === car.id).filter(item=>stateYear == CURRENT_YEAR_MONTH.january? item: +item.date < 1640984400 )}
+                                                                data={carsValue.filter(item => item['car_id'] === car.id)
+                                                                    .filter(item => stateYear == CURRENT_YEAR_MONTH.january ? item : +item.date < 1640984400)}
                                                                 load={load} setLoad={setLoad}
                                                                 stateYear={stateYear}
                                                             />
@@ -225,7 +229,9 @@ const TablePc = ({
                                         </div>
 
                                         <div className={s.table_footer}>
-                                            <TableFooterPCRow stateYear={stateYear} loadInputSelectSubType={loadInputSelectSubType} load={load}/>
+                                            <TableFooterPCRow stateYear={stateYear}
+                                                              loadInputSelectSubType={loadInputSelectSubType}
+                                                              load={load}/>
                                         </div>
 
                                     </>

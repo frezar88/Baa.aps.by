@@ -19,6 +19,8 @@ const TableModel = ({setLoadDataDone, setStateModelAll, stateModelAll}) => {
     const [stateYear, setStateYear] = useState(CURRENT_YEAR_MONTH.january)
     const [loadDateLocal, setLoadDateLocal] = useState(false)
 
+    const [electricState, setElectricState] = useState(false)
+
     useEffect(() => {
         getAllStatisticModel().then(data => {
 
@@ -59,7 +61,7 @@ const TableModel = ({setLoadDataDone, setStateModelAll, stateModelAll}) => {
             // setStateModelAll(cloneArr)
             setLoadDateLocal(true)
         })
-    }, [stateYear])
+    }, [stateYear,electricState])
 
 
     const typef = (car) => {
@@ -78,32 +80,32 @@ const TableModel = ({setLoadDataDone, setStateModelAll, stateModelAll}) => {
             ['Тип', 'Бренд', 'Модель', 'янв.', 'фев.', 'март', 'апр.', 'май', 'июнь', 'июль', 'авг.', 'сен.', 'окт.', 'ноя.', 'дек.', 'ИТОГО', ' '],
 
         ]
-        carList.filter(item => item.value !=='0').forEach(el => {
+        carList.filter(item => item.value !== '0').filter(item => electricState ? +item.car['electro'] : item).forEach(el => {
             let brandName = brandModel.IsBrand.find((item) => item.id == el.car.model.brand_id)
             let totalSum = 0
 
             carsValue.filter(item => item.car_id === el.car.id)
-                .filter(item => +item['date'] >= +stateYear && stateYear == CURRENT_YEAR_MONTH.january ? +item['date']: +item['date']<= 1638306000 )
-                .filter(item => item.value !=='0').forEach(el2 => {
+                .filter(item => +item['date'] >= +stateYear && stateYear == CURRENT_YEAR_MONTH.january ? +item['date'] : +item['date'] <= 1638306000)
+                .filter(item => item.value !== '0').forEach(el2 => {
                 totalSum += +el2.value
                 el[13] = +totalSum
             })
             objArray.push([typef(el.car['car_type_id']), brandName.name, el.car.name, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', totalSum, el.car.id])
         })
-        carsValue.filter(item => +item['date'] >= +stateYear && stateYear == CURRENT_YEAR_MONTH.january ? +item['date']: +item['date']<= 1638306000).filter(item => item.value && item.value !== '0').forEach(el => {
+        carsValue.filter(item => +item['date'] >= +stateYear && stateYear == CURRENT_YEAR_MONTH.january ? +item['date'] : +item['date'] <= 1638306000).filter(item => item.value && item.value !== '0').forEach(el => {
             let numberMonth = new Date(+el.date * 1000).toLocaleDateString('en', {month: 'numeric'})
             objArray.forEach(el3 => {
-                if (el3[16] == el.car_id)  {
+                if (el3[16] == el.car_id) {
                     el3[+numberMonth + 2] = el.value
                 }
             })
         })
-        let tempArr=[]
+        let tempArr = []
         objArray.sort(function (a, b) {
             return b[15] - a[15]
         })
-        objArray.forEach(el=>{
-            tempArr.push(el.slice(0,el.length-1))
+        objArray.forEach(el => {
+            tempArr.push(el.slice(0, el.length - 1))
         })
 
         let array = typeof tempArr != 'object' ? JSON.parse(tempArr) : tempArr;
@@ -127,7 +129,11 @@ const TableModel = ({setLoadDataDone, setStateModelAll, stateModelAll}) => {
         window.document.body.appendChild(a);
         a.click();
     }
-
+    // carList.forEach((el)=>{
+    //     if (+el.car.electro){
+    //         console.log(el)
+    //     }
+    // })
 
     return (
         <>
@@ -164,56 +170,82 @@ const TableModel = ({setLoadDataDone, setStateModelAll, stateModelAll}) => {
                                             </Form.Select>
                                         </Form>
                                     </div>
+                                    <Form>
+                                        <Form.Label
+                                            className="d-flex align-items-center justify-content-between m-0 mt-0"
+                                            style={{
+                                                fontSize: 12,
+                                                textAlign: 'end',
+                                                lineHeight: '14px'
+                                            }}>Электрические <br/> автомобили
+                                            <Form.Check
+                                                className='ps-2'
+                                                type="checkbox"
+                                                value={electricState}
+                                                onChange={event => {
+                                                    setElectricState(event.target.checked)
+                                                    setLoadDateLocal(false)
+                                                }
+                                                }
+
+                                            />
+                                        </Form.Label>
+
+                                    </Form>
                                 </div>
                             </div>
 
-                               {
-                                   loadDateLocal
-                                   ?
-                                       <>
-                                           <div style={{order: -2}}>
-                                               <TableHeadModelRow stateYear={stateYear}/>
-                                           </div>
-                                           <div style={{display: 'grid', gridTemplateColumns: '30px 1fr',}}>
-                                               <div>
-                                                   {
-                                                       load1 && load2 && carList[0] ?
-                                                           carList.filter(item => item.value !=='0').map((currElement, index) =>
-                                                               <div style={{
-                                                                   display: 'flex',
-                                                                   alignItems: 'center',
-                                                                   fontSize: '16px',
-                                                                   borderBottom: '1px solid rgb(102, 102, 102)',
-                                                                   padding: '10px 0'
-                                                               }}>{index + 1}</div>
-                                                           )
-                                                           : false
+                            {
+                                loadDateLocal
+                                    ?
+                                    <>
+                                        <div style={{order: -2}}>
+                                            <TableHeadModelRow stateYear={stateYear}/>
+                                        </div>
+                                        <div style={{display: 'grid', gridTemplateColumns: '30px 1fr',}}>
+                                            <div>
+                                                {
+                                                    load1 && load2 && carList[0] ?
+                                                        carList.filter(item => item.value != '0').filter(item => electricState ? +item.car['electro'] : item).map((currElement, index) =>
+                                                            <div style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                fontSize: '16px',
+                                                                borderBottom: '1px solid rgb(102, 102, 102)',
+                                                                padding: '10px 0'
+                                                            }}>{index + 1}</div>
+                                                        )
+                                                        : false
 
-                                                   }
-                                               </div>
-                                               <div className={s.table_body + ' model_body'} style={{display: 'grid'}}>
-                                                   {
-                                                       load1 && load2 && carList[0] ?
+                                                }
+                                            </div>
+                                            <div className={s.table_body + ' model_body'} style={{display: 'grid'}}>
+                                                {
+                                                    load1 && load2 && carList[0] ?
 
-                                                           carList.filter(item => item.value !== '0' && item.value).map(({car, value}) =>
-                                                               <TableBodyModelRow
-                                                                   stateYear={stateYear}
-                                                                   key={car.id} car={car} value={value}
-                                                                   data={carsValue.filter(item => item['car_id'] === car.id).filter(item=>stateYear == CURRENT_YEAR_MONTH.january? item: +item.date < 1640984400 )}
-                                                                   load={load} setLoad={setLoad}
-                                                               />
-                                                           )
-                                                           : <Spinner animation={'grow'}/>
-                                                   }
-                                               </div>
-                                           </div>
-                                           <div className={s.table_footer}>
-                                               <TableFooterModelRow stateYear={stateYear} load={load}/>
-                                           </div>
-                                       </>
-                                       :
-                                       <Spinner animation={"grow"}/>
-                               }
+                                                        // carList.filter(item => item.value !== '0' && item.value ).map(({car, value}) =>
+                                                        carList.filter(item => electricState ? +item.car['electro']!='0' : item).filter(item => item.value != '0')
+                                                            .map(({car, value}) =>
+                                                                <TableBodyModelRow
+                                                                    stateYear={stateYear}
+                                                                    key={car.id} car={car} value={value}
+                                                                    data={carsValue.filter(item => item['car_id'] === car.id)
+                                                                        .filter(item => stateYear == CURRENT_YEAR_MONTH.january ? item : +item.date < 1640984400)
+                                                                    }
+                                                                    load={load} setLoad={setLoad}
+                                                                />
+                                                            )
+                                                        : <Spinner animation={'grow'}/>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div className={s.table_footer}>
+                                            <TableFooterModelRow stateYear={stateYear} load={load}/>
+                                        </div>
+                                    </>
+                                    :
+                                    <Spinner animation={"grow"}/>
+                            }
 
 
                         </div>

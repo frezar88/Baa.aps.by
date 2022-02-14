@@ -20,6 +20,7 @@ const TableBodyModelRow = ({car, value, data, load, setLoad,stateYear}) => {
         }
     }
 
+
     const [totalSum, setTotalSum] = useState(0)
     useEffect(  () => {
        //  let allBlock = document.querySelectorAll(`div[data-model-id][data-mount-id]`)
@@ -47,7 +48,7 @@ const TableBodyModelRow = ({car, value, data, load, setLoad,stateYear}) => {
         }
     }, [stateYear])
 
-
+    console.log(car)
     return (
         <>
             {

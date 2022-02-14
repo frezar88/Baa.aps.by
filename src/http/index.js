@@ -3,11 +3,11 @@ import axios from "axios";
 
 
 const $host = axios.create({
-    baseURL:'/'
+    baseURL:'http://stat.auto-baa.by/'
 })
 
 const $authHost = axios.create({
-    baseURL:'/'
+    baseURL:'http://stat.auto-baa.by/'
 })
 
 const authInterceptor = config =>{
