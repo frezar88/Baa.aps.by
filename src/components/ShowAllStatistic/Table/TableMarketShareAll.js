@@ -6,7 +6,7 @@ import {getAllStatistic} from "../../../http/brandAPI";
 import TableBodyRowMarketAll from "./components/MarketShareAll/TableBodyRowMarketAll";
 import TableHeadRowMarketAll from "./components/MarketShareAll/TableHeadRowMarketAll";
 import {Button, Form, Spinner} from "react-bootstrap";
-import {CURRENT_YEAR_MONTH} from "../../../utils/consts";
+import {CURRENT_YEAR_MONTH, YEAR_MONTH_2019, YEAR_MONTH_2020} from "../../../utils/consts";
 
 
 const TableMarketShareAll = ({setLoadDataDone}) => {
@@ -63,19 +63,67 @@ const TableMarketShareAll = ({setLoadDataDone}) => {
                 '1638306000': 0,
                 'allTime': 0
             }
-            arr.forEach(el => {
+            let year2020 = {
+                '1577826000': 0,
+                '1580504400': 0,
+                '1583010000': 0,
+                '1585688400': 0,
+                '1588280400': 0,
+                '1590958800': 0,
+                '1593550800': 0,
+                '1596229200': 0,
+                '1598907600': 0,
+                '1601499600': 0,
+                '1604178000': 0,
+                '1606770000': 0,
+                'allTime': 0
+            }
+            let year2019 = {
+                '1546290000': 0,
+                '1548968400': 0,
+                '1551387600': 0,
+                '1554066000': 0,
+                '1556658000': 0,
+                '1559336400': 0,
+                '1561928400': 0,
+                '1564606800': 0,
+                '1567285200': 0,
+                '1569877200': 0,
+                '1572555600': 0,
+                '1575147600': 0,
+                'allTime': 0
+            }
+            let year = new Date(stateYear * 1000 ).getFullYear()
+            let yearEnd = Math.round(new Date(`1,1,${+year+1}`)/1000)
+            arr .filter(({date}) => date >= stateYear && date <yearEnd).forEach(el => {
                 if (stateYear == CURRENT_YEAR_MONTH.january){
                     countForMonth[el['date']] += +el.value
                     countForMonth['allTime'] += +el.value
                 }
                 if(stateYear == '1609448400'){
-                    if (+el['date']< 1640984400  ){
+                    if (+el['date'] >= '1609448400' && +el['date']< 1640984400  ){
                         countForMonthPrev[el['date']] += +el.value
                         countForMonthPrev['allTime'] += +el.value
                     }
                 }
+                if(stateYear == YEAR_MONTH_2020.january){
+                    if (+el['date'] >= YEAR_MONTH_2020.january +el['date']< 1609448400  ){
+                        year2020[el['date']] += +el.value
+                        year2020['allTime'] += +el.value
+                    }
+                }
+                if(stateYear == YEAR_MONTH_2019.january){
+                    if (+el['date'] >= YEAR_MONTH_2019.january +el['date']< 1577826000  ){
+                        year2019[el['date']] += +el.value
+                        year2019['allTime'] += +el.value
+                    }
+                }
             })
-            setCountMonth(stateYear == CURRENT_YEAR_MONTH.january ? countForMonth: countForMonthPrev)
+            if (stateYear == CURRENT_YEAR_MONTH.january) setCountMonth(countForMonth)
+            if (stateYear == '1609448400') setCountMonth(countForMonthPrev)
+            if (stateYear == YEAR_MONTH_2020.january) setCountMonth(year2020)
+            if (stateYear == YEAR_MONTH_2019.january) setCountMonth(year2019)
+
             setData(arr)
             setLoadDataDone(true)
             setLoadDateLocal(true)
@@ -87,17 +135,23 @@ const TableMarketShareAll = ({setLoadDataDone}) => {
         let objArray = [
             ['Бренд', 'янв.', 'фев.', 'март', 'апр.', 'май', 'июнь', 'июль', 'авг.', 'сен.', 'окт.', 'ноя.', 'дек.', 'ИТОГО'],
         ]
+        let year = new Date(stateYear * 1000 ).getFullYear()
+        let yearEnd = Math.round(new Date(`1,1,${+year+1}`)/1000)
         brandModel.IsBrand.forEach(el => {
             objArray.push([el.name, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',])
             let totalSum = 0
-            data.filter(item => item.brand_name === el.name).filter(item=>stateYear == CURRENT_YEAR_MONTH.january? item: +item.date < 1640984400 ).forEach(el2 => {
+            data.filter(item => item.brand_name === el.name)
+                .filter(({date}) => date >= stateYear && date <yearEnd)
+                .forEach(el2 => {
                 let numberMonth = new Date(+el2.date * 1000).toLocaleDateString('en', {month: 'numeric'})
                 totalSum += +el2.value
                 objArray.forEach(el3 => {
                     if (el3.indexOf(el2.brand_name) !== -1) {
+                        console.log(el3)
                         el3[numberMonth] = +el2.value / countMonth[el2.date] * 100 ? String(+el2.value / countMonth[el2.date] * 100).slice(0, 4) + '%' : '0'
                         console.log(countMonth)
                         el3[13] = String(+totalSum / +countMonth.allTime * 100).slice(0, 7) + '%'
+
                     }
                 })
             })
@@ -154,6 +208,8 @@ const TableMarketShareAll = ({setLoadDataDone}) => {
                                             }>
                                                 <option value={CURRENT_YEAR_MONTH.january}>2022</option>
                                                 <option value={'1609448400'}>2021</option>
+                                                <option value={'1577826000'}>2020</option>
+                                                <option value={'1546290000'}>2019</option>
                                             </Form.Select>
                                         </Form>
                                     </div>

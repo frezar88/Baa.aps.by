@@ -80,19 +80,24 @@ const TableModel = ({setLoadDataDone, setStateModelAll, stateModelAll}) => {
             ['Тип', 'Бренд', 'Модель', 'янв.', 'фев.', 'март', 'апр.', 'май', 'июнь', 'июль', 'авг.', 'сен.', 'окт.', 'ноя.', 'дек.', 'ИТОГО', ' '],
 
         ]
+        let year = new Date(stateYear * 1000 ).getFullYear()
+        let yearEnd = Math.round(new Date(`1,1,${+year+1}`)/1000)
+
+
         carList.filter(item => item.value !== '0').filter(item => electricState ? +item.car['electro'] : item).forEach(el => {
             let brandName = brandModel.IsBrand.find((item) => item.id == el.car.model.brand_id)
             let totalSum = 0
 
             carsValue.filter(item => item.car_id === el.car.id)
-                .filter(item => +item['date'] >= +stateYear && stateYear == CURRENT_YEAR_MONTH.january ? +item['date'] : +item['date'] <= 1638306000)
+                .filter(({date}) => date >= stateYear && date < yearEnd)
                 .filter(item => item.value !== '0').forEach(el2 => {
                 totalSum += +el2.value
                 el[13] = +totalSum
             })
             objArray.push([typef(el.car['car_type_id']), brandName.name, el.car.name, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', totalSum, el.car.id])
         })
-        carsValue.filter(item => +item['date'] >= +stateYear && stateYear == CURRENT_YEAR_MONTH.january ? +item['date'] : +item['date'] <= 1638306000).filter(item => item.value && item.value !== '0').forEach(el => {
+        // carsValue.filter(item => +item['date'] >= +stateYear && stateYear == CURRENT_YEAR_MONTH.january ? +item['date'] : +item['date'] <= 1638306000).filter(item => item.value && item.value !== '0').forEach(el => {
+        carsValue.filter(({date}) => date >= stateYear && date < yearEnd).filter(item => item.value && item.value !== '0').forEach(el => {
             let numberMonth = new Date(+el.date * 1000).toLocaleDateString('en', {month: 'numeric'})
             objArray.forEach(el3 => {
                 if (el3[16] == el.car_id) {
@@ -167,6 +172,8 @@ const TableModel = ({setLoadDataDone, setStateModelAll, stateModelAll}) => {
                                             }>
                                                 <option value={CURRENT_YEAR_MONTH.january}>2022</option>
                                                 <option value={'1609448400'}>2021</option>
+                                                <option value={'1577826000'}>2020</option>
+                                                <option value={'1546290000'}>2019</option>
                                             </Form.Select>
                                         </Form>
                                     </div>

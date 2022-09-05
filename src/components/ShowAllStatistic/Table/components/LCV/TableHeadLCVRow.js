@@ -1,6 +1,11 @@
 import React, {useState} from 'react';
 import s from "../../TableModel.module.css";
-import {CURRENT_YEAR_MONTH, HIGHT_LIGHT_BACKGROUDN_COLOR, PREVIOUS_YEAR_MONTH} from "../../../../../utils/consts";
+import {
+    CURRENT_YEAR_MONTH,
+    HIGHT_LIGHT_BACKGROUDN_COLOR,
+    PREVIOUS_YEAR_MONTH, YEAR_MONTH_2019,
+    YEAR_MONTH_2020
+} from "../../../../../utils/consts";
 
 const TableHeadLCVRow = ({stateYear}) => {
     let [status, setStatus] = useState()
@@ -157,7 +162,7 @@ const TableHeadLCVRow = ({stateYear}) => {
         <>
             {
                 stateYear == CURRENT_YEAR_MONTH.january
-                ?
+                    ?
                     <div className={s.table_head}>
                         <div></div>
                         {/*<div onClick={(e) => {*/}
@@ -181,66 +186,71 @@ const TableHeadLCVRow = ({stateYear}) => {
                         }} className={s.head_item + ' model_lcv_top_block'}>янв.
                         </div>
                         <div onClick={(e) => {
-                            sort(e,CURRENT_YEAR_MONTH.february)
+                            sort(e, CURRENT_YEAR_MONTH.february)
                             highLightSortBlock(CURRENT_YEAR_MONTH.february, e)
                         }} className={s.head_item + ' model_lcv_top_block'}>фев.
                         </div>
                         <div onClick={(e) => {
-                            sort(e,CURRENT_YEAR_MONTH.march)
+                            sort(e, CURRENT_YEAR_MONTH.march)
                             highLightSortBlock(CURRENT_YEAR_MONTH.march, e)
                         }} className={s.head_item + ' model_lcv_top_block'}>март
                         </div>
                         <div onClick={(e) => {
-                            sort(e,CURRENT_YEAR_MONTH.april)
+                            sort(e, CURRENT_YEAR_MONTH.april)
                             highLightSortBlock(CURRENT_YEAR_MONTH.april, e)
                         }} className={s.head_item + ' model_lcv_top_block'}>апр.
                         </div>
                         <div onClick={(e) => {
-                            sort(e,CURRENT_YEAR_MONTH.may)
+                            sort(e, CURRENT_YEAR_MONTH.may)
                             highLightSortBlock(CURRENT_YEAR_MONTH.may, e)
                         }} className={s.head_item + ' model_lcv_top_block'}>май
                         </div>
                         <div onClick={(e) => {
-                            sort(e,CURRENT_YEAR_MONTH.june)
+                            sort(e, CURRENT_YEAR_MONTH.june)
                             highLightSortBlock(CURRENT_YEAR_MONTH.june, e)
                         }} className={s.head_item + ' model_lcv_top_block'}>июнь
                         </div>
                         <div onClick={(e) => {
-                            sort(e,CURRENT_YEAR_MONTH.july)
+                            sort(e, CURRENT_YEAR_MONTH.july)
                             highLightSortBlock(CURRENT_YEAR_MONTH.july, e)
                         }} className={s.head_item + ' model_lcv_top_block'}>июль
                         </div>
                         <div onClick={(e) => {
-                            sort(e,CURRENT_YEAR_MONTH.august)
+                            sort(e, CURRENT_YEAR_MONTH.august)
                             highLightSortBlock(CURRENT_YEAR_MONTH.august, e)
                         }} className={s.head_item + ' model_lcv_top_block'}>авг.
                         </div>
                         <div onClick={(e) => {
-                            sort(e,CURRENT_YEAR_MONTH.september)
+                            sort(e, CURRENT_YEAR_MONTH.september)
                             highLightSortBlock(CURRENT_YEAR_MONTH.september, e)
                         }} className={s.head_item + ' model_lcv_top_block'}>сен.
                         </div>
                         <div onClick={(e) => {
-                            sort(e,CURRENT_YEAR_MONTH.october)
+                            sort(e, CURRENT_YEAR_MONTH.october)
                             highLightSortBlock(CURRENT_YEAR_MONTH.october, e)
                         }} className={s.head_item + ' model_lcv_top_block'}>окт.
                         </div>
                         <div onClick={(e) => {
-                            sort(e,CURRENT_YEAR_MONTH.november)
+                            sort(e, CURRENT_YEAR_MONTH.november)
                             highLightSortBlock(CURRENT_YEAR_MONTH.november, e)
                         }} className={s.head_item + ' model_lcv_top_block'}>ноя.
                         </div>
                         <div onClick={(e) => {
-                            sort(e,CURRENT_YEAR_MONTH.december)
+                            sort(e, CURRENT_YEAR_MONTH.december)
                             highLightSortBlock(CURRENT_YEAR_MONTH.december, e)
                         }} className={s.head_item + ' model_lcv_top_block'}>дек.
                         </div>
-                        <div onClick={(e)=>{
-                            sort(e,'lcv-count-year',1)
+                        <div onClick={(e) => {
+                            sort(e, 'lcv-count-year', 1)
                             highLightSortBlock('', e)
-                        }} className={s.head_item + ' model_lcv_top_block'}>ИТОГО</div>
+                        }} className={s.head_item + ' model_lcv_top_block'}>ИТОГО
+                        </div>
                     </div>
-                    :
+                    : ''
+            }
+            {
+                stateYear == PREVIOUS_YEAR_MONTH.january
+                    ?
                     <div className={s.table_head}>
                         <div></div>
                         {/*<div onClick={(e) => {*/}
@@ -323,7 +333,184 @@ const TableHeadLCVRow = ({stateYear}) => {
                             highLightSortBlock('', e)
                         }} className={s.head_item + ' model_lcv_top_block'}>ИТОГО</div>
                     </div>
+                    : ''
             }
+            {
+                stateYear == YEAR_MONTH_2020.january
+                    ?
+                    <div className={s.table_head}>
+                        <div></div>
+                        {/*<div onClick={(e) => {*/}
+                        {/*}} id={s.type_block_model} className={s.head_item}>Тип*/}
+                        {/*</div>*/}
+                        {/*<div className={s.head_item}>Класс</div>*/}
+                        <div onClick={(e) => {
+                            sortString('div.lcv-brand')
+                            highLightSortBlock('', e)
+                        }} data-name={'brand_name_block'} className={s.head_item + ' model_lcv_top_block'}>Бренд
+                        </div>
+                        <div onClick={(e) => {
+                            sortString('div.lcv-model')
+                            highLightSortBlock('', e)
+
+                        }} data-name={'model_name_block'} className={s.head_item + ' model_lcv_top_block'}>Модель
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e, YEAR_MONTH_2020.january)
+                            highLightSortBlock(YEAR_MONTH_2020.january, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>янв.
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2020.february)
+                            highLightSortBlock(YEAR_MONTH_2020.february, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>фев.
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2020.march)
+                            highLightSortBlock(YEAR_MONTH_2020.march, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>март
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2020.april)
+                            highLightSortBlock(YEAR_MONTH_2020.april, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>апр.
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2020.may)
+                            highLightSortBlock(YEAR_MONTH_2020.may, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>май
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2020.june)
+                            highLightSortBlock(YEAR_MONTH_2020.june, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>июнь
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2020.july)
+                            highLightSortBlock(YEAR_MONTH_2020.july, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>июль
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2020.august)
+                            highLightSortBlock(YEAR_MONTH_2020.august, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>авг.
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2020.september)
+                            highLightSortBlock(YEAR_MONTH_2020.september, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>сен.
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2020.october)
+                            highLightSortBlock(YEAR_MONTH_2020.october, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>окт.
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2020.november)
+                            highLightSortBlock(YEAR_MONTH_2020.november, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>ноя.
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2020.december)
+                            highLightSortBlock(YEAR_MONTH_2020.december, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>дек.
+                        </div>
+                        <div onClick={(e)=>{
+                            sort(e,'lcv-count-year',1)
+                            highLightSortBlock('', e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>ИТОГО</div>
+                    </div>
+                    : ''
+            }
+            {
+                stateYear == YEAR_MONTH_2019.january
+                    ?
+                    <div className={s.table_head}>
+                        <div></div>
+                        {/*<div onClick={(e) => {*/}
+                        {/*}} id={s.type_block_model} className={s.head_item}>Тип*/}
+                        {/*</div>*/}
+                        {/*<div className={s.head_item}>Класс</div>*/}
+                        <div onClick={(e) => {
+                            sortString('div.lcv-brand')
+                            highLightSortBlock('', e)
+                        }} data-name={'brand_name_block'} className={s.head_item + ' model_lcv_top_block'}>Бренд
+                        </div>
+                        <div onClick={(e) => {
+                            sortString('div.lcv-model')
+                            highLightSortBlock('', e)
+
+                        }} data-name={'model_name_block'} className={s.head_item + ' model_lcv_top_block'}>Модель
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e, YEAR_MONTH_2019.january)
+                            highLightSortBlock(YEAR_MONTH_2019.january, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>янв.
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2019.february)
+                            highLightSortBlock(YEAR_MONTH_2019.february, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>фев.
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2019.march)
+                            highLightSortBlock(YEAR_MONTH_2019.march, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>март
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2019.april)
+                            highLightSortBlock(YEAR_MONTH_2019.april, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>апр.
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2019.may)
+                            highLightSortBlock(YEAR_MONTH_2019.may, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>май
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2019.june)
+                            highLightSortBlock(YEAR_MONTH_2019.june, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>июнь
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2019.july)
+                            highLightSortBlock(YEAR_MONTH_2019.july, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>июль
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2019.august)
+                            highLightSortBlock(YEAR_MONTH_2019.august, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>авг.
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2019.september)
+                            highLightSortBlock(YEAR_MONTH_2019.september, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>сен.
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2019.october)
+                            highLightSortBlock(YEAR_MONTH_2019.october, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>окт.
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2019.november)
+                            highLightSortBlock(YEAR_MONTH_2019.november, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>ноя.
+                        </div>
+                        <div onClick={(e) => {
+                            sort(e,YEAR_MONTH_2019.december)
+                            highLightSortBlock(YEAR_MONTH_2019.december, e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>дек.
+                        </div>
+                        <div onClick={(e)=>{
+                            sort(e,'lcv-count-year',1)
+                            highLightSortBlock('', e)
+                        }} className={s.head_item + ' model_lcv_top_block'}>ИТОГО</div>
+                    </div>
+                    : ''
+            }
+
+
         </>
 
     );

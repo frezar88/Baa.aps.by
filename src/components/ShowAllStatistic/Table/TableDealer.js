@@ -56,12 +56,13 @@ const TableDealer = ({setLoadDataDone}) => {
             ['Дилер', 'Бренд', 'янв.', 'фев.', 'март', 'апр.', 'май', 'июнь', 'июль', 'авг.', 'сен.', 'окт.', 'ноя.', 'дек.', 'ИТОГО', ' ', ' '],
 
         ]
-
+        let year = new Date(stateYear * 1000 ).getFullYear()
+        let yearEnd = Math.round(new Date(`1,1,${+year+1}`)/1000)
         dealerList.forEach(el => {
             objArray.push([el.dealer.name, el.brand.name, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', el.brand.id, el.dealer.id])
             let totalSum = 0
             carsValue.filter(item => item.brand_id === el.brand.id && item.dealer_id === el.dealer.id)
-                .filter(item => item['date'] >= +stateYear && item['date'] < 1672520400).filter(item=>stateYear == CURRENT_YEAR_MONTH.january? item: +item.date < 1640984400 )
+                .filter(({date}) => date >= stateYear && date < yearEnd)
                 .forEach(el2 => {
                     let numberMonth = new Date(+el2.date * 1000).toLocaleDateString('en', {month: 'numeric'})
                     totalSum += +el2.value
@@ -133,6 +134,8 @@ const TableDealer = ({setLoadDataDone}) => {
                                             }>
                                                 <option value={CURRENT_YEAR_MONTH.january}>2022</option>
                                                 <option value={'1609448400'}>2021</option>
+                                                <option value={'1577826000'}>2020</option>
+                                                <option value={'1546290000'}>2019</option>
                                             </Form.Select>
                                         </Form>
                                     </div>

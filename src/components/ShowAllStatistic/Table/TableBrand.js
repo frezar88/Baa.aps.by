@@ -51,7 +51,10 @@ const TableBrand = ({setLoadDataDone, setStateBrand, stateBrand}) => {
             objArray.push([el.name, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',])
             let totalSum = 0
 
-            data.filter(item => item.brand_name === el.name).filter(item=>stateYear == CURRENT_YEAR_MONTH.january? item: +item.date < 1640984400 ).forEach(el2 => {
+            let year = new Date(stateYear * 1000).getFullYear()
+            let yearEnd = Math.round(new Date(`1,1,${+year + 1}`) / 1000)
+
+            data.filter(item => item.brand_name === el.name).filter(({date}) => date >= stateYear && date < yearEnd).forEach(el2 => {
                 let numberMonth = new Date(+el2.date * 1000).toLocaleDateString('en', {month: 'numeric'})
                 totalSum += +el2.value
                 objArray.forEach(el3 => {
@@ -113,6 +116,8 @@ const TableBrand = ({setLoadDataDone, setStateBrand, stateBrand}) => {
                                         }>
                                             <option value={CURRENT_YEAR_MONTH.january}>2022</option>
                                             <option value={'1609448400'}>2021</option>
+                                            <option value={'1577826000'}>2020</option>
+                                            <option value={'1546290000'}>2019</option>
                                         </Form.Select>
                                     </Form>
                                 </div>
@@ -122,7 +127,7 @@ const TableBrand = ({setLoadDataDone, setStateBrand, stateBrand}) => {
 
                         {
                             loadDateLocal
-                            ?
+                                ?
                                 <div className={s.table}>
                                     <div style={{order: '-2'}}>
                                         <TableHeadRow stateYear={stateYear}/>
@@ -131,8 +136,10 @@ const TableBrand = ({setLoadDataDone, setStateBrand, stateBrand}) => {
                                         <div>
                                             {
                                                 stateBrand ? brandModel.IsBrand.map((currElement, index) =>
-                                                        <div style={{height: '45px', display: 'flex', alignItems: 'center'}}><p
-                                                            style={{margin: '0'}}>{index + 1}</p></div>
+                                                        <div
+                                                            style={{height: '45px', display: 'flex', alignItems: 'center'}}>
+                                                            <p
+                                                                style={{margin: '0'}}>{index + 1}</p></div>
                                                     )
                                                     : false
                                             }
@@ -143,17 +150,20 @@ const TableBrand = ({setLoadDataDone, setStateBrand, stateBrand}) => {
                                                 stateBrand[0] ?
 
                                                     stateBrand ? brandModel.IsBrand.map(({id, name}) =>
-                                                        <TableBodyRow stateYear={stateYear} load={load} setLoad={setLoad}
+                                                        <TableBodyRow stateYear={stateYear} load={load}
+                                                                      setLoad={setLoad}
                                                                       key={id} brand_id={id}
                                                                       brand_name={name}
                                                                       data={stateBrand.filter(item => item.brand_id === id)}/>
                                                     ) : false
                                                     :
                                                     data ? brandModel.IsBrand.map(({id, name}) =>
-                                                        <TableBodyRow stateYear={stateYear} load={load} setLoad={setLoad}
-                                                                      key={id} brand_id={id}
-                                                                      brand_name={name}
-                                                                      data={data.filter(item => item.brand_id === id).filter(item=>stateYear == CURRENT_YEAR_MONTH.january? item: +item.date < 1640984400 )}/>
+                                                            <TableBodyRow stateYear={stateYear} load={load}
+                                                                          setLoad={setLoad}
+                                                                          key={id} brand_id={id}
+                                                                          brand_name={name}
+                                                                          data={data.filter(item => item.brand_id === id).filter(item => stateYear == CURRENT_YEAR_MONTH.january ? item : +item.date < 1640984400)}/>
+                                                        // data={data.filter(item => item.brand_id === id)}/>
                                                     ) : false
                                             }
                                         </div>

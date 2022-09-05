@@ -98,7 +98,11 @@ const TableLCV = ({
             let brandName = brandModel.IsBrand.find((item) => item.id === el.car.model.brand_id)
             objArray.push([typef(el.car['car_type_id']), brandName.name, el.car.name, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', el.car.id])
             let totalSum = 0
-            carsValue.filter(item => item.car_id === el.car.id).filter(item => item['date'] >= +stateYear && stateYear == CURRENT_YEAR_MONTH.january ? +item['date']: +item['date']<= 1638306000).forEach(el2 => {
+            let year = new Date(stateYear * 1000 ).getFullYear()
+            let yearEnd = Math.round(new Date(`1,1,${+year+1}`)/1000)
+            carsValue.filter(item => item.car_id === el.car.id)
+                .filter(({date}) => date >= stateYear && date < yearEnd)
+                .forEach(el2 => {
                 let numberMonth = new Date(+el2.date * 1000).toLocaleDateString('en', {month: 'numeric'})
 
                 totalSum += +el2.value
@@ -170,6 +174,8 @@ const TableLCV = ({
                                             }>
                                                 <option value={CURRENT_YEAR_MONTH.january}>2022</option>
                                                 <option value={'1609448400'}>2021</option>
+                                                <option value={'1577826000'}>2020</option>
+                                                <option value={'1546290000'}>2019</option>
                                             </Form.Select>
                                         </Form>
                                     </div>
