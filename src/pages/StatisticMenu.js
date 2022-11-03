@@ -26,6 +26,7 @@ const StatisticMenu = () => {
             })
         } catch (e) {
             if (e.response.status === 403) {
+                console.log(e.response.data)
                 setErrorText(e.response.data)
                 setOnlyRead(true)
             }

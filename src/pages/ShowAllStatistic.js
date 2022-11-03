@@ -21,10 +21,13 @@ import {
 import s from './ShowAllStatistic.module.css'
 import Graph from "../components/ShowAllStatistic/Graph/Graph";
 import TableStatisticalAnalysis from "../components/ShowAllStatistic/Table/TableStatisticalAnalysis";
-import {MONTH_OBJECT, PREVIOUS_YEAR_MONTH} from "../utils/consts";
+import {MONTH_ANALYSIS, MONTH_OBJECT, PREVIOUS_YEAR_MONTH} from "../utils/consts";
+import TableBrandLCV from "../components/ShowAllStatistic/Table/TableBrandLCV";
+import TableBrandPC from "../components/ShowAllStatistic/Table/TableBrandPC";
 
 
 const ShowAllStatistic = () => {
+
 
     const [carsDataAnalysis, setCarsDataAnalysis] = useState({allTime: '', month: ''})
     const [carsDataAnalysisLCV, setCarsDataAnalysisLCV] = useState({allTime: '', month: ''})
@@ -53,7 +56,7 @@ const ShowAllStatistic = () => {
 
     const [loadInputSelectSubType, setLoadInputSelectSubType] = useState(true)
 
-    const [toDayStat, setToDatStat] = useState()
+    const [toDayStat, setToDatStat] = useState(MONTH_ANALYSIS)
 
 
     useEffect(() => {
@@ -176,7 +179,9 @@ const ShowAllStatistic = () => {
 
         let lastMonth1 = new Date();
         lastMonth1.setMonth(lastMonth1.getMonth());
-        let date = Math.round(new Date(`${lastMonth1.getMonth()}.01.22`) / 1000)
+        // let date = Math.round(new Date(`${lastMonth1.getMonth()}.01.22`) / 1000)
+        let date = MONTH_ANALYSIS
+
 
         let arrCurrentMonth = []
         let arrPrevMonth = []
@@ -370,7 +375,8 @@ const ShowAllStatistic = () => {
 
         let lastMonth1 = new Date();
         lastMonth1.setMonth(lastMonth1.getMonth());
-        let date = Math.round(new Date(`${lastMonth1.getMonth()}.01.22`) / 1000)
+        // let date = Math.round(new Date(`${lastMonth1.getMonth()}.01.22`) / 1000)
+        let date = MONTH_ANALYSIS
 
         let arrCurrentMonth = []
         let arrPrevMonth = []
@@ -437,6 +443,9 @@ const ShowAllStatistic = () => {
 
         setState({allTime: objData2, month: objData3})
     }
+    useEffect(()=>{
+        console.log(2)
+    },[])
 
     useEffect(() => {
         getAllStatistic(PREVIOUS_YEAR_MONTH.january).then((data) => {
@@ -453,7 +462,6 @@ const ShowAllStatistic = () => {
             collectDataToAnalysisToModel(data, setModelsPCCarsDataAnalysis,1)
             collectDataToAnalysisToModel(data, setModelsLCVCarsDataAnalysis,2)
         })
-
 
     }, [monthState])
 
@@ -501,7 +509,7 @@ const ShowAllStatistic = () => {
                                                 className={s.list}
                                                 style={{
                                                     paddingTop: 0,
-                                                    display: navBar.main === 'model' || navBar.main === 'market_share' ? 'flex' : 'none'
+                                                    display: navBar.main === 'model' || navBar.main === 'market_share' || navBar.main ==='brand' ? 'flex' : 'none'
                                                 }}>
                                                 <li data-type-second={'ALL'} className={s.item + ' ' + s.active}>Все
                                                 </li>
@@ -533,8 +541,14 @@ const ShowAllStatistic = () => {
                                             }
                                         </div>
                                     </div>
-                                    {navBar.main === 'brand' ?
+                                    {navBar.main === 'brand'  && navBar.second === 'ALL' ?
                                         <TableBrand stateBrand={stateBrand} setStateBrand={setStateBrand}
+                                                    setLoadDataDone={setLoadDataDone}/> : false}
+                                    {navBar.main === 'brand'  && navBar.second === 'PC' ?
+                                        <TableBrandPC stateBrand={stateBrand} setStateBrand={setStateBrand}
+                                                    setLoadDataDone={setLoadDataDone}/> : false}
+                                    {navBar.main === 'brand'  && navBar.second === 'LCV' ?
+                                        <TableBrandLCV stateBrand={stateBrand} setStateBrand={setStateBrand}
                                                     setLoadDataDone={setLoadDataDone}/> : false}
                                     {navBar.main === 'model' && navBar.second === 'ALL' ?
                                         <TableModel stateModelAll={stateModelAll} setStateModelAll={setStateModelAll}

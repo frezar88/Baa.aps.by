@@ -125,17 +125,25 @@ const TableStatisticalAnalysis = ({
 
     const download = () => {
         csvYear(data, 'analyses_year')
-        csvMonth(data, 'analyses_month')
+
         csvYear(dataPC, 'analyses_PC_year')
-        csvMonth(dataPC, 'analyses_PC_month')
+
         csvYear(dataLCV, 'analyses_LCV_year')
-        csvMonth(dataLCV, 'analyses_LCV_month')
+
         csvYearModel(dataModel, 'top_25_model_year', 25, )
-        csvMonthModel(dataModel,'top_25_model_month', 25, )
+
         csvYearModel(dataModelPC, 'top_20_pc_year', 20, 1)
-        csvMonthModel(dataModelPC,'top_20_pc_month', 20, 1)
+
         csvYearModel(dataModelLCV, 'top_5_lcv_year', 5, 2)
-        csvMonthModel(dataModelLCV,'top_5_lcv_month', 5, 2)
+
+        if (monthState){
+            csvMonth(data, 'analyses_month')
+            csvMonth(dataPC, 'analyses_PC_month')
+            csvMonth(dataLCV, 'analyses_LCV_month')
+            csvMonthModel(dataModel,'top_25_model_month', 25, )
+            csvMonthModel(dataModelPC,'top_20_pc_month', 20, 1)
+            csvMonthModel(dataModelLCV,'top_5_lcv_month', 5, 2)
+        }
     }
 
     return (
@@ -150,13 +158,13 @@ const TableStatisticalAnalysis = ({
                         <SelectYearAnalysis value={monthState} setValue={setMonthState}/>
                     </div>
                 </div>
-                <div className={s.result} style={{gridTemplateColumns: monthState || toDayStat ? '1fr 1fr' : '1fr'}}>
+                <div className={s.result} style={{gridTemplateColumns: monthState  ? '1fr 1fr' : '1fr',maxWidth:monthState?'unset':'850px',margin:monthState?'20px 0':'20px auto'}}>
                     {
                         data
                             ? <>
                                 <ResultItem date_load={data} name={'analyses_year'} click={csvYear} data={data.allTime}
                                             title={`за 2022 год`}/>
-                                {data.month?.data
+                                {data.month?.data && monthState
                                     ?
                                     <ResultItem date_load={data} name={'analyses_month'} click={csvMonth} data={data.month}
                                                 title={monthState ? `за ${new Date(monthState * 1000).toLocaleDateString('ru', {month: 'long'})} 2022`
@@ -173,7 +181,7 @@ const TableStatisticalAnalysis = ({
                             ? <>
                                 <ResultItem date_load={dataPC} name={'analyses_PC_year'} click={csvYear}
                                             data={dataPC.allTime} title={`PC за 2022 год`}/>
-                                {dataPC.month?.data
+                                {dataPC.month?.data && monthState
                                     ? <ResultItem date_load={dataPC} name={'analyses_PC_month'} click={csvMonth}
                                                   data={dataPC.month}
                                                   title={monthState ? `PC за ${new Date(monthState * 1000).toLocaleDateString('ru', {month: 'long'})} 2022`
@@ -190,7 +198,7 @@ const TableStatisticalAnalysis = ({
                             ? <>
                                 <ResultItem date_load={dataLCV} name={'analyses_LCV_year'} click={csvYear}
                                             data={dataLCV.allTime} title={`LCV за 2022 год`}/>
-                                {dataLCV.month?.data
+                                {dataLCV.month?.data && monthState
                                     ? <ResultItem date_load={dataLCV} name={'analyses_LCV_month'} data={dataLCV.month}
                                                   click={csvMonth}
                                                   title={monthState ? `LCV за ${new Date(monthState * 1000).toLocaleDateString('ru', {month: 'long'})} 2022`
@@ -208,7 +216,7 @@ const TableStatisticalAnalysis = ({
                                 <ResultItemModel filter={''} slice={25} date_load={dataModel} name={'top_25_model_year'}
                                                  click={csvYearModel} data={dataModel.allTime}
                                                  title={`Топ 25 моделей за 2022 год`}/>
-                                {dataLCV.month?.data
+                                {dataLCV.month?.data && monthState
                                     ? <ResultItemModel filter={''} slice={25} date_load={dataModel} name={'analyses_LCV_month'}
                                                        data={dataModel.month} click={csvMonthModel}
                                                        title={monthState ? `Топ 25 моделей за ${new Date(monthState * 1000).toLocaleDateString('ru', {month: 'long'})} 2022`
@@ -226,7 +234,7 @@ const TableStatisticalAnalysis = ({
                                 <ResultItemModel filter={1} slice={20} date_load={dataModelPC} name={'top_20_pc_year'}
                                                  click={csvYearModel} data={dataModelPC.allTime}
                                                  title={`Топ 20 PC за 2022 год`}/>
-                                {dataLCV.month?.data
+                                {dataLCV.month?.data && monthState
                                     ? <ResultItemModel filter={1} slice={20} date_load={dataModelPC} name={'top_20_pc_month'}
                                                        data={dataModelPC.month} click={csvMonthModel}
                                                        title={monthState ? `Топ 20 PC за ${new Date(monthState * 1000).toLocaleDateString('ru', {month: 'long'})} 2022`
@@ -244,7 +252,7 @@ const TableStatisticalAnalysis = ({
                                 <ResultItemModel filter={2} slice={5} date_load={dataModelLCV} name={'top_5_lcv_year'}
                                                  click={csvYearModel} data={dataModelLCV.allTime}
                                                  title={`Топ 5 LCV за 2022 год`}/>
-                                {dataLCV.month?.data
+                                {dataLCV.month?.data && monthState
                                     ? <ResultItemModel filter={2} slice={5} date_load={dataModelLCV} name={'top_5_lcv_month'}
                                                        data={dataModelLCV.month} click={csvMonthModel}
                                                        title={monthState ? `Топ 5 LCV за ${new Date(monthState * 1000).toLocaleDateString('ru', {month: 'long'})} 2022`

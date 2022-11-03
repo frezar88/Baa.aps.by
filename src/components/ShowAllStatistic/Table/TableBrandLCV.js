@@ -3,12 +3,12 @@ import s from './TableBrand.module.css'
 import TableHeadRow from "./components/brand/TableHeadRow";
 import TableBodyRow from "./components/brand/TableBodyRow";
 import {Context} from "../../../index";
-import {getAllStatistic} from "../../../http/brandAPI";
+import {getAllStatistic, getAllStatisticLcv} from "../../../http/brandAPI";
 import TableFooterRow from "./components/brand/TableFooterRow";
 import {Button, Form, Spinner} from "react-bootstrap";
 import {CURRENT_YEAR_MONTH} from "../../../utils/consts";
 
-const TableBrand = ({setLoadDataDone, setStateBrand, stateBrand}) => {
+const TableBrandLCV = ({setLoadDataDone, setStateBrand, stateBrand}) => {
     const {brandModel} = useContext(Context)
     const [load, setLoad] = useState(false)
     const [data, setData] = useState()
@@ -18,7 +18,7 @@ const TableBrand = ({setLoadDataDone, setStateBrand, stateBrand}) => {
 
     useEffect(() => {
 
-        getAllStatistic(stateYear).then((data) => {
+        getAllStatisticLcv(stateYear).then((data) => {
             let arr = []
             for (let dataKey in data.data.data) {
                 data.data.data[dataKey].forEach(el => {
@@ -81,7 +81,7 @@ const TableBrand = ({setLoadDataDone, setStateBrand, stateBrand}) => {
         const universalBOM = "\uFEFF";
         let a = window.document.createElement('a');
         a.setAttribute('href', 'data:text/csv; charset=utf-8,' + encodeURIComponent(universalBOM + str));
-        a.setAttribute('download', 'brand.csv');
+        a.setAttribute('download', 'brandLCV.csv');
         window.document.body.appendChild(a);
         a.click();
     }
@@ -184,4 +184,4 @@ const TableBrand = ({setLoadDataDone, setStateBrand, stateBrand}) => {
     );
 };
 
-export default TableBrand;
+export default TableBrandLCV;

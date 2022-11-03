@@ -1,12 +1,13 @@
 import React from 'react';
 import {Form} from "react-bootstrap";
+import {MONTH_ANALYSIS} from "../../../../../utils/consts";
 
 const SelectYearAnalysis = ({value,setValue}) => {
     return (
         <div>
             <Form style={{display:'flex',gap:'20px',alignItems:'center'}}>
                 <Form.Select value={value} onChange={(e)=>setValue(e.target.value)} style={{width:'100%',minWidth:120}} >
-                    <option value={''}>Прошлый месяц</option>
+                    <option value={''}>Выберите месяц</option>
                     <option value={'1640984400'}>январь</option>
                     <option value={'1643662800'}>февраль</option>
                     <option value={'1646082000'}>март</option>

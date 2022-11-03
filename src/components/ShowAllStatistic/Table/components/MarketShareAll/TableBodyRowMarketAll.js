@@ -4,6 +4,7 @@ import {CURRENT_YEAR_MONTH, PREVIOUS_YEAR_MONTH, YEAR_MONTH_2019, YEAR_MONTH_202
 
 
 const TableBodyRowMarketAll = (props) => {
+
     const [Sum, SetSum] = useState(0)
 
     useEffect(() => {
@@ -19,6 +20,7 @@ const TableBodyRowMarketAll = (props) => {
                     let currentBlock = document.querySelector(`div[data-brand-id="${el.brand_id}"][data-mount-id="${el.date}"][data-market="${'true'}"]`)
                     if (currentBlock) {
                         let interest =+el.value / +props.countMonth[el.date] * 100?+el.value / +props.countMonth[el.date] * 100 +'':'0'
+                        // currentBlock.innerHTML =interest.slice(0,4)+'%'
                         currentBlock.innerHTML =interest.slice(0,4)+'%'
 
                         currentBlock.style.fontWeight = '500'
